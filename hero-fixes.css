@@ -1,0 +1,130 @@
+/* ============================================
+   PATCH — paste these inside your <style> tag
+   They override the broken rules
+   ============================================ */
+
+/* FIX 1: Hero buttons — restore pill backgrounds */
+.hero-btn {
+  padding: 12px 26px;
+  border-radius: 999px;
+  font-size: 0.93rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.hero-btn-primary {
+  background: var(--violet);
+  color: #fff !important;
+  box-shadow: var(--glow);
+  border: none;
+}
+.hero-btn-primary:hover {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: var(--glow-lg);
+  color: #fff !important;
+}
+
+.hero-btn-secondary {
+  background: transparent;
+  border: 1.5px solid var(--violet);
+  color: var(--violet) !important;
+}
+.hero-btn-secondary:hover {
+  background: var(--violet);
+  color: #fff !important;
+}
+
+.hero-btn-ghost {
+  background: transparent;
+  border: 1.5px solid var(--border-color);
+  color: var(--text-secondary) !important;
+}
+.hero-btn-ghost:hover {
+  border-color: var(--violet);
+  color: var(--violet) !important;
+}
+
+/* FIX 2: Trust stats — proper mobile grid */
+.trust-stats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* desktop: 5 cols */
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+}
+.stat-mini {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+@media (max-width: 900px) {
+  .trust-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .trust-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* Make rating card span full width on small screens */
+  .trust-item.highlight {
+    grid-column: 1 / -1;
+  }
+}
+
+/* FIX 3: Hide the duplicate rating chip in hero-visual.
+   The 4.9 rating already shows in the trust bar below,
+   so we remove it from the floating chips */
+.hero-right-col .hero-chip:nth-child(3) {
+  display: none;
+}
+
+/* FIX 4: Hero section top padding — 
+   prevents content hiding behind fixed nav */
+.hero {
+  padding-top: 130px;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding-top: 100px;
+  }
+  /* Stack buttons vertically on mobile but keep them styled */
+  .hero-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+  .hero-btn {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+/* FIX 5: Portrait row on very small screens */
+@media (max-width: 480px) {
+  .hero-portrait-row {
+    grid-template-columns: 1fr;
+  }
+  .hero-right-col {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .hero-chip {
+    flex: 1;
+    min-width: 140px;
+  }
+}
