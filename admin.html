@@ -1,0 +1,2735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HoblemercyTech — Admin Dashboard</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#7C3AED">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="HMT Admin">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icon-152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icon-16.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+
+  <style>
+    /* ===== TOKENS ===== */
+    :root {
+      --bg:        #080C14;
+      --bg-panel:  #0D1117;
+      --bg-card:   #111827;
+      --bg-hover:  #161E2E;
+      --border:    #1E293B;
+      --border-hi: #2D3F55;
+
+      --violet:  #7C3AED;
+      --purple:  #9333EA;
+      --indigo:  #6366F1;
+      --fuchsia: #A855F7;
+      --green:   #10B981;
+      --amber:   #F59E0B;
+      --red:     #EF4444;
+      --blue:    #3B82F6;
+
+      --text-1: #F1F5F9;
+      --text-2: #94A3B8;
+      --text-3: #475569;
+
+      --glow:    0 0 24px rgba(124,58,237,0.3);
+      --glow-lg: 0 0 48px rgba(124,58,237,0.45);
+      --shadow:  0 4px 24px rgba(0,0,0,0.5);
+
+      --sidebar-w: 240px;
+      --header-h:  60px;
+      --radius:    12px;
+      --radius-lg: 18px;
+    }
+
+    /* ===== RESET ===== */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { font-size:16px; }
+    body { font-family:"Inter",sans-serif; background:var(--bg); color:var(--text-1); line-height:1.6; overflow-x:hidden; min-height:100vh; }
+    h1,h2,h3,h4 { font-family:"Oswald",sans-serif; line-height:1.2; }
+    button { cursor:pointer; font-family:"Inter",sans-serif; }
+    input, textarea, select { font-family:"Inter",sans-serif; }
+    a { text-decoration:none; color:inherit; }
+    ul { list-style:none; }
+
+    /* ===== LOGIN SCREEN ===== */
+    .login-screen {
+      position:fixed; inset:0; z-index:9999;
+      background:var(--bg);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .login-screen.hidden { display:none; }
+    .login-box {
+      width:100%; max-width:380px; padding:40px 32px;
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:var(--radius-lg); box-shadow:var(--shadow);
+    }
+    .login-logo { font-family:"Oswald",sans-serif; font-size:1.4rem; font-weight:700; margin-bottom:6px; }
+    .login-logo span { color:var(--fuchsia); }
+    .login-sub { font-size:0.85rem; color:var(--text-2); margin-bottom:28px; }
+    .login-field { margin-bottom:16px; }
+    .login-field label { display:block; font-size:0.8rem; font-weight:600; color:var(--text-2); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.8px; }
+    .login-field input {
+      width:100%; padding:11px 14px;
+      background:var(--bg-panel); border:1.5px solid var(--border);
+      border-radius:var(--radius); color:var(--text-1); font-size:16px;
+      transition:border-color 0.25s, box-shadow 0.25s;
+    }
+    .login-field input:focus { outline:none; border-color:var(--violet); box-shadow:0 0 0 3px rgba(124,58,237,0.15); }
+    .login-btn {
+      width:100%; padding:12px; margin-top:8px;
+      background:linear-gradient(135deg,var(--violet),var(--fuchsia));
+      color:#fff; border:none; border-radius:var(--radius);
+      font-size:0.95rem; font-weight:600; transition:all 0.3s;
+    }
+    .login-btn:hover { transform:translateY(-2px); box-shadow:var(--glow); }
+    .login-error { color:var(--red); font-size:0.82rem; margin-top:10px; text-align:center; display:none; }
+
+    /* ===== LAYOUT ===== */
+    .dashboard { display:flex; min-height:100vh; }
+    .dashboard.hidden { display:none; }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width:var(--sidebar-w); background:var(--bg-panel);
+      border-right:1px solid var(--border);
+      position:fixed; top:0; left:0; bottom:0;
+      display:flex; flex-direction:column;
+      z-index:100; transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    .sidebar-logo {
+      padding:20px 20px 16px;
+      border-bottom:1px solid var(--border);
+      font-family:"Oswald",sans-serif; font-size:1.15rem; font-weight:700;
+    }
+    .sidebar-logo span { color:var(--fuchsia); }
+    .sidebar-label { font-size:0.68rem; font-weight:700; letter-spacing:1.8px; text-transform:uppercase; color:var(--text-3); padding:16px 20px 6px; }
+    .sidebar nav { flex:1; overflow-y:auto; padding:8px 12px; }
+    .nav-item {
+      display:flex; align-items:center; gap:11px;
+      padding:10px 12px; border-radius:var(--radius);
+      color:var(--text-2); font-size:0.88rem; font-weight:500;
+      transition:all 0.2s; cursor:pointer; margin-bottom:2px;
+      border:none; background:none; width:100%; text-align:left;
+    }
+    .nav-item i { width:18px; font-size:0.95rem; flex-shrink:0; }
+    .nav-item:hover { background:var(--bg-hover); color:var(--text-1); }
+    .nav-item.active { background:rgba(124,58,237,0.15); color:var(--fuchsia); }
+    .nav-item.active i { color:var(--fuchsia); }
+    .nav-badge {
+      margin-left:auto; background:var(--violet);
+      color:#fff; font-size:0.68rem; font-weight:700;
+      padding:2px 7px; border-radius:999px; min-width:20px; text-align:center;
+    }
+    .sidebar-footer {
+      padding:14px 12px; border-top:1px solid var(--border);
+    }
+    .logout-btn {
+      display:flex; align-items:center; gap:10px;
+      padding:9px 12px; border-radius:var(--radius);
+      color:var(--red); font-size:0.85rem; font-weight:500;
+      border:none; background:none; width:100%; transition:all 0.2s;
+    }
+    .logout-btn:hover { background:rgba(239,68,68,0.1); }
+
+    /* ===== MAIN ===== */
+    .main { margin-left:var(--sidebar-w); flex:1; display:flex; flex-direction:column; min-height:100vh; }
+
+    /* ===== TOPBAR ===== */
+    .topbar {
+      height:var(--header-h); background:var(--bg-panel);
+      border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 24px; position:sticky; top:0; z-index:50;
+    }
+    .topbar-left { display:flex; align-items:center; gap:14px; }
+    .page-title { font-family:"Oswald",sans-serif; font-size:1.1rem; font-weight:600; }
+    .topbar-right { display:flex; align-items:center; gap:12px; }
+    .topbar-btn {
+      padding:7px 16px; border-radius:var(--radius);
+      font-size:0.82rem; font-weight:600;
+      border:1.5px solid var(--border); background:none;
+      color:var(--text-2); transition:all 0.2s; display:flex; align-items:center; gap:7px;
+    }
+    .topbar-btn:hover { border-color:var(--violet); color:var(--fuchsia); }
+    .topbar-btn.primary { background:linear-gradient(135deg,var(--violet),var(--fuchsia)); color:#fff; border-color:transparent; }
+    .topbar-btn.primary:hover { box-shadow:var(--glow); transform:translateY(-1px); }
+    .menu-toggle { display:none; background:none; border:none; color:var(--text-1); font-size:1.2rem; }
+
+    /* ===== CONTENT ===== */
+    .content { padding:24px; flex:1; }
+
+    /* ===== STAT CARDS ===== */
+    .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+    .stat-card {
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:var(--radius-lg); padding:20px 22px;
+      transition:all 0.3s; position:relative; overflow:hidden;
+    }
+    .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; border-radius:3px 3px 0 0; }
+    .stat-card.violet::before { background:var(--violet); }
+    .stat-card.green::before  { background:var(--green); }
+    .stat-card.amber::before  { background:var(--amber); }
+    .stat-card.blue::before   { background:var(--blue); }
+    .stat-card:hover { border-color:var(--border-hi); transform:translateY(-3px); box-shadow:var(--shadow); }
+    .stat-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+    .stat-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1rem; }
+    .stat-icon.violet  { background:rgba(124,58,237,0.15); color:var(--violet); }
+    .stat-icon.green   { background:rgba(16,185,129,0.15);  color:var(--green); }
+    .stat-icon.amber   { background:rgba(245,158,11,0.15);  color:var(--amber); }
+    .stat-icon.blue    { background:rgba(59,130,246,0.15);  color:var(--blue); }
+    .stat-trend { font-size:0.75rem; font-weight:600; display:flex; align-items:center; gap:4px; }
+    .stat-trend.up   { color:var(--green); }
+    .stat-trend.down { color:var(--red); }
+    .stat-value { font-family:"Oswald",sans-serif; font-size:2rem; font-weight:700; line-height:1; margin-bottom:4px; }
+    .stat-label { font-size:0.8rem; color:var(--text-2); }
+
+    /* ===== MESSAGES PANEL ===== */
+    .messages-panel { display:grid; grid-template-columns:360px 1fr; gap:16px; height:calc(100vh - 190px); }
+    .msg-list-wrap {
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:var(--radius-lg); display:flex; flex-direction:column; overflow:hidden;
+    }
+    .msg-list-header { padding:14px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:10px; flex-shrink:0; }
+    .msg-search {
+      font-size: 16px;
+      flex:1; padding:8px 12px; padding-left:34px;
+      background:var(--bg-panel); border:1.5px solid var(--border);
+      border-radius:var(--radius); color:var(--text-1); font-size:0.85rem;
+      transition:border-color 0.25s; position:relative;
+    }
+    .msg-search:focus { outline:none; border-color:var(--violet); }
+    .search-wrap { position:relative; flex:1; }
+    .search-wrap i { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--text-3); font-size:0.8rem; }
+    .msg-filter { padding:7px 12px; background:var(--bg-panel);
+font-size:16px; border:1.5px solid var(--border); border-radius:var(--radius); color:var(--text-2); font-size:0.8rem; }
+    .msg-filter:focus { outline:none; }
+    .msg-list { overflow-y:auto; flex:1; }
+    .msg-list::-webkit-scrollbar { width:4px; }
+    .msg-list::-webkit-scrollbar-track { background:transparent; }
+    .msg-list::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+    .msg-item {
+      padding:14px 16px; border-bottom:1px solid var(--border);
+      cursor:pointer; transition:background 0.2s; position:relative;
+    }
+    .msg-item:hover { background:var(--bg-hover); }
+    .msg-item.active { background:rgba(124,58,237,0.1); border-left:3px solid var(--violet); }
+    .msg-item.unread .msg-item-name::after { content:''; display:inline-block; width:7px; height:7px; background:var(--violet); border-radius:50%; margin-left:8px; vertical-align:middle; }
+    .msg-item-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
+    .msg-item-name { font-weight:600; font-size:0.88rem; }
+    .msg-item-time { font-size:0.72rem; color:var(--text-3); }
+    .msg-item-service { font-size:0.75rem; color:var(--fuchsia); font-weight:600; margin-bottom:4px; }
+    .msg-item-preview { font-size:0.8rem; color:var(--text-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:290px; }
+    .msg-status-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .msg-status-dot.new     { background:var(--violet); }
+    .msg-status-dot.read    { background:var(--border-hi); }
+    .msg-status-dot.replied { background:var(--green); }
+    .msg-empty { padding:48px 20px; text-align:center; color:var(--text-3); }
+    .msg-empty i { font-size:2.5rem; margin-bottom:12px; display:block; }
+
+    /* ===== MESSAGE DETAIL ===== */
+    .msg-detail {
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:var(--radius-lg); display:flex; flex-direction:column; overflow:hidden;
+    }
+    .msg-detail-placeholder {
+      flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      color:var(--text-3); gap:12px;
+    }
+    .msg-detail-placeholder i { font-size:3rem; }
+    .msg-detail-placeholder p { font-size:0.9rem; }
+    .detail-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+    .detail-header-left { display:flex; align-items:center; gap:12px; }
+    .detail-avatar {
+      width:42px; height:42px; border-radius:50%;
+      background:linear-gradient(135deg,var(--violet),var(--fuchsia));
+      display:flex; align-items:center; justify-content:center;
+      font-family:"Oswald",sans-serif; font-weight:700; font-size:1rem; color:#fff; flex-shrink:0;
+    }
+    .detail-name { font-weight:700; font-size:0.95rem; }
+    .detail-email { font-size:0.8rem; color:var(--text-2); }
+    .detail-actions { display:flex; gap:8px; }
+    .action-btn {
+      padding:7px 14px; border-radius:var(--radius);
+      font-size:0.8rem; font-weight:600; border:1.5px solid var(--border);
+      background:none; color:var(--text-2); transition:all 0.2s;
+      display:flex; align-items:center; gap:6px;
+    }
+    .action-btn:hover { border-color:var(--violet); color:var(--fuchsia); }
+    .action-btn.primary { background:linear-gradient(135deg,var(--violet),var(--fuchsia)); color:#fff; border-color:transparent; }
+    .action-btn.primary:hover { box-shadow:var(--glow); }
+    .action-btn.danger { border-color:rgba(239,68,68,0.3); color:var(--red); }
+    .action-btn.danger:hover { background:rgba(239,68,68,0.1); border-color:var(--red); }
+
+    /* Detail body */
+    .detail-body { padding:20px; overflow-y:auto; flex:1; }
+    .detail-body::-webkit-scrollbar { width:4px; }
+    .detail-body::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+    .detail-meta { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px; }
+    .meta-card { background:var(--bg-panel); border:1px solid var(--border); border-radius:var(--radius); padding:12px 14px; }
+    .meta-label { font-size:0.72rem; color:var(--text-3); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+    .meta-value { font-size:0.88rem; font-weight:600; }
+    .detail-message-box { background:var(--bg-panel); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin-bottom:20px; }
+    .detail-message-label { font-size:0.72rem; color:var(--text-3); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
+    .detail-message-text { font-size:0.92rem; line-height:1.8; color:var(--text-2); white-space:pre-wrap; }
+    .status-row { display:flex; align-items:center; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+    .status-badge { display:inline-flex; align-items:center; gap:6px; padding:5px 14px; border-radius:999px; font-size:0.78rem; font-weight:700; }
+    .status-badge.new     { background:rgba(124,58,237,0.15); color:var(--fuchsia); }
+    .status-badge.read    { background:rgba(71,85,105,0.3);   color:var(--text-2); }
+    .status-badge.replied { background:rgba(16,185,129,0.15); color:var(--green); }
+
+    /* Reply box */
+    .reply-box { border-top:1px solid var(--border); padding:16px 20px; flex-shrink:0; }
+    .reply-box-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+    .reply-box-title { font-size:0.82rem; font-weight:700; color:var(--text-2); text-transform:uppercase; letter-spacing:0.8px; }
+    .reply-to-label { font-size:0.78rem; color:var(--text-3); }
+    .reply-subject {
+      width:100%; padding:9px 12px; margin-bottom:8px;
+      background:var(--bg-panel); border:1.5px solid var(--border);
+      border-radius:var(--radius); color:var(--text-1); font-size:16px;
+      transition:border-color 0.25s;
+    }
+    .reply-subject:focus { outline:none; border-color:var(--violet); }
+    .reply-textarea {
+      width:100%; padding:11px 14px; min-height:100px;
+      background:var(--bg-panel); border:1.5px solid var(--border);
+      border-radius:var(--radius); color:var(--text-1); font-size:16px;
+      resize:vertical; transition:border-color 0.25s; line-height:1.7;
+    }
+    .reply-textarea:focus { outline:none; border-color:var(--violet); }
+    .reply-footer { display:flex; align-items:center; justify-content:space-between; margin-top:10px; flex-wrap:wrap; gap:8px; }
+    .reply-from { font-size:0.75rem; color:var(--text-3); }
+    .reply-from span { color:var(--fuchsia); }
+    .reply-actions { display:flex; gap:8px; }
+    .send-btn {
+      padding:9px 22px; background:linear-gradient(135deg,var(--violet),var(--fuchsia));
+      color:#fff; border:none; border-radius:var(--radius);
+      font-size:0.88rem; font-weight:600; transition:all 0.3s;
+      display:flex; align-items:center; gap:7px;
+    }
+    .send-btn:hover { box-shadow:var(--glow); transform:translateY(-1px); }
+    .send-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+    /* ===== COMPOSE PAGE ===== */
+    .compose-wrap { max-width:700px; }
+    .compose-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; }
+    .compose-header { padding:18px 22px; border-bottom:1px solid var(--border); font-family:"Oswald",sans-serif; font-size:1.1rem; }
+    .compose-body { padding:22px; }
+    .compose-field { margin-bottom:16px; }
+    .compose-field label { display:block; font-size:0.78rem; font-weight:600; color:var(--text-2); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.8px; }
+    .compose-field input, .compose-field textarea, .compose-field select {
+      width:100%; padding:11px 14px;
+      background:var(--bg-panel); border:1.5px solid var(--border);
+      border-radius:var(--radius); color:var(--text-1); font-size:16px;
+      transition:border-color 0.25s;
+    }
+    .compose-field input:focus, .compose-field textarea:focus, .compose-field select:focus {
+      outline:none; border-color:var(--violet); box-shadow:0 0 0 3px rgba(124,58,237,0.12);
+    }
+    .compose-field textarea { min-height:160px; resize:vertical; line-height:1.75; }
+    .compose-footer { padding:16px 22px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    .compose-from { font-size:0.8rem; color:var(--text-3); }
+    .compose-from span { color:var(--fuchsia); font-weight:600; }
+
+    /* ===== SETTINGS PAGE ===== */
+    .settings-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:860px; }
+    .settings-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; }
+    .settings-card-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+    .settings-card-header i { color:var(--fuchsia); }
+    .settings-card-header h3 { font-size:0.95rem; font-weight:600; }
+    .settings-card-body { padding:18px 20px; }
+    .settings-field { margin-bottom:14px; }
+    .settings-field label { display:block; font-size:0.78rem; color:var(--text-2); margin-bottom:5px; font-weight:500; }
+    .settings-field input {
+      width:100%; padding:9px 12px;
+      background:var(--bg-panel); border:1.5px solid var(--border);
+      border-radius:var(--radius); color:var(--text-1); font-size:16px; transition:border-color 0.25s;
+    }
+    .settings-field input:focus { outline:none; border-color:var(--violet); }
+    .settings-save { padding:9px 20px; background:linear-gradient(135deg,var(--violet),var(--fuchsia)); color:#fff; border:none; border-radius:var(--radius); font-size:0.85rem; font-weight:600; transition:all 0.3s; }
+    .settings-save:hover { box-shadow:var(--glow); }
+
+    /* ===== PAGES (show/hide) ===== */
+    .page { display:none; }
+    .page.active { display:block; }
+
+    /* ===== TOAST ===== */
+    .toast {
+      position:fixed; bottom:24px; right:24px;
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:var(--radius); padding:13px 20px;
+      box-shadow:var(--shadow); z-index:9999;
+      display:flex; align-items:center; gap:10px;
+      transform:translateY(80px); opacity:0;
+      transition:all 0.4s ease; font-size:0.88rem; max-width:320px;
+    }
+    .toast.show { transform:translateY(0); opacity:1; }
+    .toast i { font-size:1.1rem; }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,0.7);
+      backdrop-filter:blur(4px); z-index:500;
+      display:none; align-items:center; justify-content:center; padding:20px;
+    }
+    .modal-overlay.open { display:flex; }
+    .modal {
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:var(--radius-lg); width:100%; max-width:480px;
+      box-shadow:var(--shadow); overflow:hidden;
+    }
+    .modal-header { padding:18px 22px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    .modal-header h3 { font-size:1rem; font-weight:600; }
+    .modal-close { background:none; border:none; color:var(--text-2); font-size:1.1rem; transition:color 0.2s; }
+    .modal-close:hover { color:var(--text-1); }
+    .modal-body { padding:22px; }
+    .modal-footer { padding:16px 22px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:10px; }
+    .modal-btn { padding:9px 20px; border-radius:var(--radius); font-size:0.85rem; font-weight:600; border:1.5px solid var(--border); background:none; color:var(--text-2); transition:all 0.2s; }
+    .modal-btn:hover { border-color:var(--violet); color:var(--fuchsia); }
+    .modal-btn.danger { background:var(--red); color:#fff; border-color:var(--red); }
+    .modal-btn.danger:hover { box-shadow:0 0 16px rgba(239,68,68,0.4); }
+
+    /* ===== LOADING SPINNER ===== */
+    .spinner-wrap { display:flex; align-items:center; justify-content:center; padding:48px; }
+    .spinner { width:36px; height:36px; border:3px solid var(--border); border-top-color:var(--violet); border-radius:50%; animation:spin 0.8s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* ===== MOBILE SIDEBAR OVERLAY ===== */
+    .sidebar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:99; }
+
+/* ── Attach zone ── */
+.attach-zone {
+  margin-top: 8px;
+  border: 1.5px dashed var(--border-hi);
+  border-radius: var(--radius);
+  padding: 18px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: border-color 0.25s, background 0.25s;
+  text-align: center;
+  font-size: 0.83rem;
+  color: var(--text-2);
+  user-select: none;
+}
+.attach-zone i { font-size: 1.5rem; color: var(--text-3); margin-bottom: 2px; transition: color 0.25s; }
+.attach-zone:hover,
+.attach-zone.drag-over { border-color: var(--violet); background: rgba(124,58,237,0.06); }
+.attach-zone.drag-over i { color: var(--fuchsia); }
+
+/* ── Previews grid ── */
+.attach-previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Media preview (image / video) */
+.attach-preview-item {
+  position: relative;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-panel);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+.attach-preview-item:hover { border-color: var(--violet); box-shadow: 0 0 0 2px rgba(124,58,237,0.15); }
+
+.attach-preview-item.is-media { width: 90px; height: 90px; flex-shrink: 0; }
+.attach-preview-item.is-media img,
+.attach-preview-item.is-media video {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+/* Video play badge */
+.video-badge {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.4);
+  color: #fff; font-size: 1.4rem;
+  pointer-events: none;
+}
+
+/* File preview (non-media) */
+.attach-preview-item.is-file {
+  width: auto; max-width: 210px;
+  padding: 10px 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.file-icon { font-size: 1.5rem; flex-shrink: 0; }
+.file-icon.pdf   { color: #EF4444; }
+.file-icon.doc   { color: #3B82F6; }
+.file-icon.xls   { color: #10B981; }
+.file-icon.ppt   { color: #F59E0B; }
+.file-icon.zip   { color: #94A3B8; }
+.file-icon.other { color: var(--text-3); }
+.file-info { min-width: 0; }
+.file-name { font-size: 0.78rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; display: block; }
+.file-size { font-size: 0.7rem; color: var(--text-3); }
+
+/* Remove button */
+.attach-remove {
+  position: absolute; top: 4px; right: 4px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(0,0,0,0.7); color: #fff;
+  border: none; font-size: 0.6rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s; z-index: 2;
+}
+.attach-remove:hover { background: var(--red); }
+
+/* ── Send Preview Modal ── */
+.preview-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  z-index: 600;
+  display: none; align-items: center; justify-content: center;
+  padding: 16px;
+}
+.preview-modal-overlay.open { display: flex; }
+.preview-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  width: 100%; max-width: 580px;
+  max-height: 90vh;
+  display: flex; flex-direction: column;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+  overflow: hidden;
+}
+.preview-modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.preview-modal-header h3 { font-size: 1rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+.preview-modal-header h3 i { color: var(--fuchsia); }
+.preview-modal-close { background: none; border: none; color: var(--text-2); font-size: 1rem; cursor: pointer; transition: color 0.2s; }
+.preview-modal-close:hover { color: var(--text-1); }
+
+.preview-modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+.preview-modal-body::-webkit-scrollbar { width: 4px; }
+.preview-modal-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* Email preview card */
+.email-preview-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.email-preview-header {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.email-preview-row {
+  display: flex; gap: 8px; font-size: 0.82rem;
+  padding: 4px 0; color: var(--text-2);
+}
+.email-preview-row strong { color: var(--text-1); min-width: 56px; flex-shrink: 0; }
+.email-preview-subject {
+  font-family: "Oswald", sans-serif;
+  font-size: 1rem; font-weight: 600;
+  margin-top: 10px; color: var(--text-1);
+}
+.email-preview-body {
+  padding: 18px;
+  font-size: 0.88rem;
+  line-height: 1.8;
+  color: var(--text-2);
+  white-space: pre-wrap;
+  border-bottom: 1px solid var(--border);
+}
+.email-preview-attachments {
+  padding: 14px 18px;
+}
+.preview-attach-label {
+  font-size: 0.72rem; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+.preview-attach-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.preview-attach-chip {
+  display: flex; align-items: center; gap: 7px;
+  padding: 6px 12px; border-radius: var(--radius);
+  background: var(--bg-card); border: 1px solid var(--border);
+  font-size: 0.78rem;
+}
+.preview-attach-chip i { font-size: 0.9rem; }
+.preview-attach-thumb {
+  width: 48px; height: 48px; border-radius: 8px;
+  object-fit: cover; border: 1px solid var(--border);
+}
+
+.preview-modal-footer {
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0; gap: 10px;
+}
+.preview-note { font-size: 0.78rem; color: var(--text-3); }
+.preview-send-btn {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, var(--violet), var(--fuchsia));
+  color: #fff; border: none; border-radius: var(--radius);
+  font-size: 0.9rem; font-weight: 600;
+  display: flex; align-items: center; gap: 8px;
+  transition: all 0.3s; cursor: pointer;
+}
+.preview-send-btn:hover { box-shadow: var(--glow); transform: translateY(-1px); }
+.preview-send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.preview-cancel-btn {
+  padding: 10px 20px; background: none;
+  border: 1.5px solid var(--border); border-radius: var(--radius);
+  color: var(--text-2); font-size: 0.88rem; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.preview-cancel-btn:hover { border-color: var(--violet); color: var(--fuchsia); }
+
+/* Sending state */
+.send-btn.sending, .preview-send-btn.sending {
+  opacity: 0.65; pointer-events: none;
+}
+
+/* Link input shared */
+.link-input-wrap { position: relative; }
+.link-input-wrap i {
+  position: absolute; left: 11px; top: 50%;
+  transform: translateY(-50%); color: var(--text-3); font-size: 0.8rem;
+}
+.link-input-wrap input { padding-left: 30px !important; font-size: 16px; }
+
+.compose-wrap {
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.compose-card {
+  width: 100%;
+  overflow: hidden;
+}
+
+.compose-body {
+  padding: 22px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.compose-field input,
+.compose-field textarea,
+.compose-field select {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.compose-field textarea {
+  min-height: 160px;
+  resize: vertical;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* ── FIX: Content area never overflows ── */
+.content {
+  padding: 20px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.main {
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+/* ── FIX: Messages panel responsive ── */
+.messages-panel {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 16px;
+  height: calc(100vh - 185px);
+  min-height: 500px;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ── SENT PAGE ── */
+.sent-page-wrap {
+  width: 100%;
+  max-width: 860px;
+}
+
+.sent-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.sent-filter-btn {
+  padding: 7px 18px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: 1.5px solid var(--border);
+  background: none;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.sent-filter-btn:hover,
+.sent-filter-btn.active {
+  background: rgba(124,58,237,0.12);
+  border-color: var(--violet);
+  color: var(--fuchsia);
+}
+
+.sent-search-wrap {
+  flex: 1;
+  min-width: 180px;
+  position: relative;
+}
+.sent-search-wrap i {
+  position: absolute;
+  left: 11px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-3);
+  font-size: 0.8rem;
+}
+.sent-search {
+  width: 100%;
+  padding: 8px 12px 8px 30px;
+  background: var(--bg-panel);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-1);
+  font-size: 0.85rem;
+  font-family: inherit;
+  transition: border-color 0.25s;
+}
+.sent-search:focus {
+  outline: none;
+  border-color: var(--violet);
+}
+
+.sent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sent-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  transition: all 0.25s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.sent-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  border-radius: 3px 0 0 3px;
+}
+.sent-card.type-reply::before   { background: var(--violet); }
+.sent-card.type-compose::before { background: var(--indigo); }
+
+.sent-card:hover {
+  border-color: var(--border-hi);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.sent-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.sent-card-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.sent-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: "Oswald", sans-serif;
+  font-weight: 700; font-size: 0.85rem;
+  color: #fff; flex-shrink: 0;
+}
+.sent-avatar.reply   { background: linear-gradient(135deg, var(--violet), var(--fuchsia)); }
+.sent-avatar.compose { background: linear-gradient(135deg, var(--indigo), var(--blue)); }
+
+.sent-to {
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sent-to-email {
+  font-size: 0.76rem;
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sent-card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.sent-time {
+  font-size: 0.72rem;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.sent-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.sent-type-badge.reply   { background: rgba(124,58,237,0.15); color: var(--fuchsia); }
+.sent-type-badge.compose { background: rgba(99,102,241,0.15);  color: var(--indigo); }
+
+.sent-subject {
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sent-preview {
+  font-size: 0.8rem;
+  color: var(--text-2);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sent-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.sent-attach-count {
+  font-size: 0.74rem;
+  color: var(--text-3);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sent-link-chip {
+  font-size: 0.74rem;
+  color: var(--fuchsia);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+.sent-link-chip:hover { text-decoration: underline; }
+
+.sent-empty {
+  text-align: center;
+  padding: 56px 20px;
+  color: var(--text-3);
+}
+.sent-empty i { font-size: 2.5rem; display: block; margin-bottom: 12px; }
+.sent-empty p { font-size: 0.9rem; }
+
+/* Sent detail expand */
+.sent-card-body {
+  display: none;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.sent-card.expanded .sent-card-body { display: block; }
+.sent-full-message {
+  font-size: 0.86rem;
+  color: var(--text-2);
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.inbox-page-wrap {
+  width: 100%;
+  max-width: 100%;
+}
+
+.inbox-toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.inbox-panel {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 16px;
+  height: calc(100vh - 200px);
+  min-height: 500px;
+}
+
+/* Unread dot in inbox list */
+.inbox-item.unread .msg-item-name::after {
+  content: '';
+  display: inline-block;
+  width: 7px; height: 7px;
+  background: var(--blue);
+  border-radius: 50%;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.status-badge.unread { background: rgba(59,130,246,0.15); color: var(--blue); }
+.status-badge.read   { background: rgba(71,85,105,0.3);   color: var(--text-2); }
+
+/* Inbox badge in sidebar */
+#inboxBadge {
+  background: var(--blue);
+}
+
+/* Fix inbox list item display */
+.msg-item-service {
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Inbox subject color */
+#inboxList .msg-item-service { color: var(--blue); }
+
+/* Fix empty meta rows */
+.meta-value {
+  font-size: 0.88rem;
+  font-weight: 600;
+  word-break: break-word;
+  min-height: 18px;
+}
+.meta-value:empty::after {
+  content: '—';
+  color: var(--text-3);
+  font-weight: 400;
+}
+
+/* Stats row — 5 cards now */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1100px) {
+  .stats-row { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 700px) {
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 400px) {
+  .stats-row { grid-template-columns: 1fr; }
+}
+
+/* Real-time pulse dot */
+.realtime-dot {
+  width: 8px; height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  display: inline-block;
+  animation: rtPulse 2s ease-in-out infinite;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+@keyframes rtPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+.topbar-status {
+  font-size: 0.75rem;
+  color: var(--text-3);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+@media (max-width: 860px) {
+  .inbox-panel {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .inbox-toolbar { flex-wrap: wrap; }
+}
+
+/* ── RESPONSIVE FIXES ── */
+@media (max-width: 1100px) {
+  .messages-panel {
+    grid-template-columns: 300px 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .menu-toggle { display: block !important; }
+
+  .messages-panel {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .msg-list-wrap {
+    max-height: 380px;
+  }
+
+  .msg-detail {
+    min-height: 520px;
+  }
+
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .compose-wrap {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 580px) {
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .content { padding: 12px; }
+
+  .compose-body { padding: 14px; }
+
+  .compose-footer {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+  .compose-footer > div {
+    width: 100%;
+    justify-content: stretch;
+  }
+  .compose-footer .send-btn,
+  .compose-footer .action-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .reply-footer {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+  .reply-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+  .reply-actions .send-btn,
+  .reply-actions .action-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .detail-meta {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .sent-card-top {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .sent-card-right {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .preview-modal {
+    max-height: 95vh;
+  }
+}
+
+@media (max-width: 400px) {
+  .stats-row { grid-template-columns: 1fr; }
+  .detail-meta { grid-template-columns: 1fr; }
+}
+
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width:1100px) {
+      .stats-row { grid-template-columns:repeat(2,1fr); }
+      .messages-panel { grid-template-columns:300px 1fr; }
+    }
+    @media (max-width:860px) {
+      .sidebar { transform:translateX(-100%); }
+      .sidebar.open { transform:translateX(0); }
+      .sidebar-overlay { display:block; }
+      .main { margin-left:0; }
+      .menu-toggle { display:block; }
+      .messages-panel { grid-template-columns:1fr; height:auto; }
+      .msg-detail { min-height:500px; }
+      .settings-grid { grid-template-columns:1fr; }
+    }
+    @media (max-width:560px) {
+      .stats-row { grid-template-columns:1fr 1fr; }
+      .content { padding:14px; }
+      .detail-meta { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:400px) {
+      .stats-row { grid-template-columns:1fr; }
+      .detail-meta { grid-template-columns:1fr; }
+    }
+  </style>
+  
+</head>
+
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">Hoblemercy<span>Tech</span></div>
+    <p class="login-sub">Admin Dashboard — Sign in to continue</p>
+    <div class="login-field">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="contact@hoblemercytech.com" autocomplete="email">
+    </div>
+    <div class="login-field">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="login-btn" id="loginBtn">Sign In</button>
+    <p class="login-error" id="loginError">Invalid email or password.</p>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div class="dashboard hidden" id="dashboard">
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">Hoblemercy<span>Tech</span></div>
+  
+<nav>
+  <div class="sidebar-label">Main</div>
+  <button class="nav-item active" data-page="messages">
+    <i class="fas fa-inbox"></i> Messages
+    <span class="nav-badge" id="unreadBadge">0</span>
+  </button>
+  <button class="nav-item" data-page="inbox">
+    <i class="fas fa-envelope-open-text"></i> Inbox
+    <span class="nav-badge" id="inboxBadge" style="background:var(--blue);display:none;">0</span>
+  </button>
+  <button class="nav-item" data-page="sent">
+    <i class="fas fa-paper-plane"></i> Sent
+    <span class="nav-badge" id="sentBadge" style="background:var(--indigo);display:none;">0</span>
+  </button>
+  <button class="nav-item" data-page="compose">
+    <i class="fas fa-pen-to-square"></i> Compose
+  </button>
+  <div class="sidebar-label">Admin</div>
+  <button class="nav-item" data-page="settings">
+    <i class="fas fa-gear"></i> Settings
+  </button>
+</nav>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">
+        <i class="fas fa-right-from-bracket"></i> Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+        <span class="page-title" id="pageTitle">Messages</span>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-btn" id="refreshBtn"><i class="fas fa-rotate-right"></i> Refresh</button>
+        <button class="topbar-btn primary" data-page="compose" id="composeTopBtn"><i class="fas fa-pen"></i> Compose</button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- Stats -->
+     <div class="stats-row" id="statsRow">
+  <!-- Total (messages + inbox combined) -->
+  <div class="stat-card violet">
+    <div class="stat-top">
+      <div class="stat-icon violet"><i class="fas fa-layer-group"></i></div>
+      <span class="stat-trend up"><i class="fas fa-arrow-up"></i> All</span>
+    </div>
+    <div class="stat-value" id="statTotal">—</div>
+    <div class="stat-label">Total Received</div>
+  </div>
+
+  <!-- Unread messages (contact form) -->
+  <div class="stat-card green">
+    <div class="stat-top">
+      <div class="stat-icon green"><i class="fas fa-inbox"></i></div>
+    </div>
+    <div class="stat-value" id="statNew">—</div>
+    <div class="stat-label">Unread Messages</div>
+  </div>
+
+  <!-- Unread inbox (email replies) -->
+  <div class="stat-card blue">
+    <div class="stat-top">
+      <div class="stat-icon blue"><i class="fas fa-envelope-open-text"></i></div>
+    </div>
+    <div class="stat-value" id="statInboxUnread">—</div>
+    <div class="stat-label">Unread Inbox</div>
+  </div>
+
+  <!-- Replied -->
+  <div class="stat-card amber">
+    <div class="stat-top">
+      <div class="stat-icon amber"><i class="fas fa-reply"></i></div>
+    </div>
+    <div class="stat-value" id="statReplied">—</div>
+    <div class="stat-label">Replied</div>
+  </div>
+
+  <!-- Sent -->
+  <div class="stat-card" style="--card-accent:var(--indigo);">
+    <div class="stat-top">
+      <div class="stat-icon" style="background:rgba(99,102,241,0.15);color:var(--indigo);"><i class="fas fa-paper-plane"></i></div>
+    </div>
+    <div class="stat-value" id="statSent">—</div>
+    <div class="stat-label">Emails Sent</div>
+  </div>
+</div>
+
+
+      <!-- ===== MESSAGES PAGE ===== -->
+      <div class="page active" id="page-messages">
+        <div class="messages-panel">
+
+          <!-- List -->
+          <div class="msg-list-wrap">
+            <div class="msg-list-header">
+              <div class="search-wrap">
+                <i class="fas fa-search"></i>
+                <input type="text" class="msg-search" id="msgSearch" placeholder="Search messages...">
+              </div>
+              <select class="msg-filter" id="msgFilter">
+                <option value="all">All</option>
+                <option value="new">Unread</option>
+                <option value="read">Read</option>
+                <option value="replied">Replied</option>
+              </select>
+            </div>
+            <div class="msg-list" id="msgList">
+              <div class="spinner-wrap"><div class="spinner"></div></div>
+            </div>
+          </div>
+
+          <!-- Detail -->
+          <div class="msg-detail" id="msgDetail">
+            <div class="msg-detail-placeholder" id="detailPlaceholder">
+              <i class="fas fa-inbox"></i>
+              <p>Select a message to read</p>
+            </div>
+
+            <div id="detailContent" style="display:none;flex-direction:column;height:100%;">
+
+              <!-- Header -->
+              <div class="detail-header">
+                <div class="detail-header-left">
+                  <div class="detail-avatar" id="detailAvatar">?</div>
+                  <div>
+                    <div class="detail-name" id="detailName">—</div>
+                    <div class="detail-email" id="detailEmail">—</div>
+                  </div>
+                </div>
+                <div class="detail-actions">
+                  <button class="action-btn" id="markReadBtn"><i class="fas fa-check"></i> Mark Read</button>
+                  <button class="action-btn danger" id="deleteBtn"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+
+              <!-- Body -->
+              <div class="detail-body">
+                <div class="status-row">
+                  <span class="status-badge new" id="detailStatus">New</span>
+                  <span style="font-size:0.78rem;color:var(--text-3);" id="detailDate">—</span>
+                </div>
+                <div class="detail-meta">
+                  <div class="meta-card"><div class="meta-label">Service</div><div class="meta-value" id="detailService">—</div></div>
+                  <div class="meta-card"><div class="meta-label">Budget</div><div class="meta-value" id="detailBudget">—</div></div>
+                  <div class="meta-card"><div class="meta-label">Timeline</div><div class="meta-value" id="detailTimeline">—</div></div>
+                  <div class="meta-card"><div class="meta-label">Phone</div><div class="meta-value" id="detailPhone">—</div></div>
+                  <div class="meta-card"><div class="meta-label">Status</div><div class="meta-value" id="detailStatusText">—</div></div>
+                  <div class="meta-card"><div class="meta-label">Received</div><div class="meta-value" id="detailTime">—</div></div>
+                </div>
+                <div class="detail-message-box">
+                  <div class="detail-message-label">Project Brief</div>
+                  <div class="detail-message-text" id="detailMessage">—</div>
+                </div>
+              </div>
+
+              <!-- ✅ REPLY BOX — with link + attachments -->
+              <div class="reply-box">
+                <div class="reply-box-header">
+                  <span class="reply-box-title">
+                    <i class="fas fa-reply" style="margin-right:6px;color:var(--fuchsia);"></i>Reply
+                  </span>
+                  <span class="reply-to-label">To: <span id="replyToLabel">—</span></span>
+                </div>
+
+                <input type="text" class="reply-subject" id="replySubject" placeholder="Subject...">
+                <textarea class="reply-textarea" id="replyBody" placeholder="Write your reply..."></textarea>
+
+                <!-- Optional link -->
+                <div style="margin-top:8px;position:relative;">
+                  <i class="fas fa-link" style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text-3);font-size:0.78rem;pointer-events:none;"></i>
+                  <input type="url" id="replyLink"
+                    style="width:100%;padding:9px 12px 9px 30px;background:var(--bg-panel);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--text-1);font-size:0.82rem;transition:border-color 0.25s;font-family:inherit;"
+                    placeholder="Optional link (portfolio, invoice, Figma...)">
+                </div>
+
+                <!-- Attachment drop zone -->
+                <div class="attach-zone" id="replyAttachZone">
+                  <i class="fas fa-paperclip"></i>
+                  <span>Drop files here or
+                    <label for="replyFileInput" style="color:var(--fuchsia);cursor:pointer;text-decoration:underline;">browse</label>
+                  </span>
+                  <span style="font-size:0.72rem;color:var(--text-3);">Images, videos, PDFs, docs — max 10MB · max 5 files</span>
+                  <input type="file" id="replyFileInput" multiple
+                    accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.pptx,.zip"
+                    style="display:none;">
+                </div>
+
+                <!-- Attachment previews -->
+                <div class="attach-previews" id="replyPreviews"></div>
+
+                <div class="reply-footer">
+                  <span class="reply-from">From: <span>contact@hoblemercytech.com</span></span>
+                  <div class="reply-actions">
+                    <button class="action-btn" id="clearReplyBtn"><i class="fas fa-xmark"></i> Clear</button>
+                    <button class="send-btn" id="sendReplyBtn"><i class="fas fa-paper-plane"></i> Send Reply</button>
+                  </div>
+                </div>
+              </div>
+              <!-- end reply-box -->
+
+            </div>
+            <!-- end detailContent -->
+          </div>
+          <!-- end msg-detail -->
+
+        </div>
+      </div>
+
+      <!-- ===== COMPOSE PAGE ===== -->
+      <div class="page" id="page-compose">
+        <div class="compose-wrap">
+          <div class="compose-card">
+            <div class="compose-header">
+              <i class="fas fa-pen-to-square" style="color:var(--fuchsia);margin-right:8px;"></i>New Email
+            </div>
+            <div class="compose-body">
+
+              <div class="compose-field">
+                <label>To (email address) *</label>
+                <input type="email" id="composeTo" placeholder="recipient@example.com">
+              </div>
+
+              <div class="compose-field">
+                <label>Subject *</label>
+                <input type="text" id="composeSubject" placeholder="e.g. Application for Frontend Developer Role">
+              </div>
+
+              <div class="compose-field">
+                <label>Message *</label>
+                <textarea id="composeBody" placeholder="Write your email..."></textarea>
+              </div>
+
+              <!-- Optional link -->
+              <div class="compose-field">
+                <label>
+                  Link
+                  <span style="color:var(--text-3);font-weight:400;font-size:0.72rem;margin-left:4px;">(optional)</span>
+                </label>
+                <div style="position:relative;">
+                  <i class="fas fa-link" style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text-3);font-size:0.78rem;pointer-events:none;"></i>
+                  <input type="url" id="composeLink"
+                    style="padding-left:30px;"
+                    placeholder="https://hoblemercytech.com or any relevant link">
+                </div>
+              </div>
+
+              <!-- Attachments -->
+              <div class="compose-field">
+                <label>
+                  Attachments
+                  <span style="color:var(--text-3);font-weight:400;font-size:0.72rem;margin-left:4px;">(optional)</span>
+                </label>
+                <div class="attach-zone" id="composeAttachZone">
+                  <i class="fas fa-cloud-arrow-up"></i>
+                  <span>Drop files here or
+                    <label for="composeFileInput" style="color:var(--fuchsia);cursor:pointer;text-decoration:underline;">browse</label>
+                  </span>
+                  <span style="font-size:0.72rem;color:var(--text-3);">Images, videos, PDFs, docs — max 10MB · max 5 files</span>
+                  <input type="file" id="composeFileInput" multiple
+                    accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.pptx,.zip"
+                    style="display:none;">
+                </div>
+                <div class="attach-previews" id="composePreviews"></div>
+              </div>
+
+            </div>
+            <div class="compose-footer">
+              <span class="compose-from">From: <span>contact@hoblemercytech.com</span></span>
+              <div style="display:flex;gap:8px;">
+                <button class="action-btn" id="clearComposeBtn"><i class="fas fa-xmark"></i> Clear</button>
+                <button class="send-btn" id="sendComposeBtn"><i class="fas fa-paper-plane"></i> Send Email</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SETTINGS PAGE ===== -->
+      <div class="page" id="page-settings">
+        <div class="settings-grid">
+          <div class="settings-card">
+            <div class="settings-card-header"><i class="fas fa-key"></i><h3>Change Password</h3></div>
+            <div class="settings-card-body">
+              <div class="settings-field"><label>Current Password</label><input type="password" id="currPass" placeholder="••••••••"></div>
+              <div class="settings-field"><label>New Password</label><input type="password" id="newPass" placeholder="••••••••"></div>
+              <div class="settings-field"><label>Confirm Password</label><input type="password" id="confirmPass" placeholder="••••••••"></div>
+              <button class="settings-save" id="changePassBtn">Update Password</button>
+            </div>
+          </div>
+          <div class="settings-card">
+            <div class="settings-card-header"><i class="fas fa-envelope"></i><h3>Email Settings</h3></div>
+            <div class="settings-card-body">
+              <div class="settings-field"><label>From Name</label><input type="text" id="settingsFromName" value="HoblemercyTech"></div>
+              <div class="settings-field"><label>From Email</label><input type="text" value="contact@hoblemercytech.com" disabled style="opacity:0.5;"></div>
+              <div class="settings-field"><label>Notification Email</label><input type="email" id="settingsNotifEmail" value="hoblemercytech@gmail.com"></div>
+              <button class="settings-save" id="saveEmailSettings">Save Settings</button>
+            </div>
+          </div>
+        </div>
+      </div>
+<div class="page" id="page-sent">
+  <div class="sent-page-wrap">
+
+    <div class="sent-filters">
+      <div class="sent-search-wrap">
+        <i class="fas fa-search"></i>
+        <input type="text" class="sent-search" id="sentSearch" placeholder="Search sent emails...">
+      </div>
+      <button class="sent-filter-btn active" data-sent-filter="all">All</button>
+      <button class="sent-filter-btn" data-sent-filter="reply">Replies</button>
+      <button class="sent-filter-btn" data-sent-filter="compose">Composed</button>
+    </div>
+
+    <div class="sent-list" id="sentList">
+      <div class="spinner-wrap"><div class="spinner"></div></div>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="page" id="page-inbox">
+  <div class="inbox-page-wrap">
+
+    <div class="inbox-toolbar">
+      <div class="sent-search-wrap" style="flex:1;">
+        <i class="fas fa-search"></i>
+        <input type="text" class="sent-search" id="inboxSearch" placeholder="Search inbox...">
+      </div>
+      <select class="msg-filter" id="inboxFilter">
+        <option value="all">All</option>
+        <option value="unread">Unread</option>
+        <option value="read">Read</option>
+      </select>
+      <button class="topbar-btn" id="refreshInboxBtn">
+        <i class="fas fa-rotate-right"></i> Refresh
+      </button>
+    </div>
+
+    <div class="inbox-panel">
+
+      <!-- Inbox list -->
+      <div class="msg-list-wrap">
+        <div class="msg-list" id="inboxList">
+          <div class="spinner-wrap"><div class="spinner"></div></div>
+        </div>
+      </div>
+
+      <!-- Inbox detail -->
+      <div class="msg-detail" id="inboxDetail">
+        <div class="msg-detail-placeholder" id="inboxDetailPlaceholder">
+          <i class="fas fa-envelope-open"></i>
+          <p>Select an email to read</p>
+        </div>
+        <div id="inboxDetailContent" style="display:none;flex-direction:column;height:100%;">
+
+          <div class="detail-header">
+            <div class="detail-header-left">
+              <div class="detail-avatar" id="inboxAvatar">?</div>
+              <div>
+                <div class="detail-name"  id="inboxFromName">—</div>
+                <div class="detail-email" id="inboxFromEmail">—</div>
+              </div>
+            </div>
+            <div class="detail-actions">
+              <button class="action-btn primary" id="replyInboxBtn">
+                <i class="fas fa-reply"></i> Reply
+              </button>
+              <button class="action-btn" id="markInboxReadBtn">
+                <i class="fas fa-check"></i> Read
+              </button>
+              <button class="action-btn danger" id="deleteInboxBtn">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="detail-body">
+            <div class="status-row">
+              <span class="status-badge" id="inboxStatus">Unread</span>
+              <span style="font-size:0.78rem;color:var(--text-3);" id="inboxDate">—</span>
+            </div>
+
+            <div class="detail-meta" style="grid-template-columns:repeat(2,1fr);">
+              <div class="meta-card">
+                <div class="meta-label">From</div>
+                <div class="meta-value" id="inboxMetaFrom">—</div>
+              </div>
+              <div class="meta-card">
+                <div class="meta-label">To</div>
+                <div class="meta-value" id="inboxMetaTo">—</div>
+              </div>
+            </div>
+
+            <!-- Subject -->
+            <div style="background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;">
+              <div style="font-size:0.72rem;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Subject</div>
+              <div style="font-family:'Oswald',sans-serif;font-size:1.1rem;font-weight:600;" id="inboxSubject">—</div>
+            </div>
+
+            <!-- Message body -->
+            <div class="detail-message-box">
+              <div class="detail-message-label">Message</div>
+              <div class="detail-message-text" id="inboxBody">—</div>
+            </div>
+          </div>
+
+          <!-- Quick reply box -->
+          <div class="reply-box" id="inboxReplyBox" style="display:none;">
+            <div class="reply-box-header">
+              <span class="reply-box-title">
+                <i class="fas fa-reply" style="margin-right:6px;color:var(--fuchsia);"></i>Quick Reply
+              </span>
+              <button class="action-btn" id="closeInboxReply" style="padding:4px 10px;font-size:0.75rem;">
+                <i class="fas fa-xmark"></i>
+              </button>
+            </div>
+            <input type="text" class="reply-subject" id="inboxReplySubject" placeholder="Subject...">
+            <textarea class="reply-textarea" id="inboxReplyBody" placeholder="Write your reply..." style="min-height:90px;"></textarea>
+            <div style="margin-top:8px;position:relative;">
+              <i class="fas fa-link" style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text-3);font-size:0.78rem;pointer-events:none;"></i>
+              <input type="url" id="inboxReplyLink"
+                style="width:100%;padding:9px 12px 9px 30px;background:var(--bg-panel);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--text-1);font-size:0.82rem;font-family:inherit;"
+                placeholder="Optional link...">
+            </div>
+            <div class="attach-zone" id="inboxAttachZone">
+              <i class="fas fa-paperclip"></i>
+              <span>Drop files or <label for="inboxFileInput" style="color:var(--fuchsia);cursor:pointer;text-decoration:underline;">browse</label></span>
+              <input type="file" id="inboxFileInput" multiple
+                accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.pptx,.zip"
+                style="display:none;">
+            </div>
+            <div class="attach-previews" id="inboxPreviews"></div>
+            <div class="reply-footer">
+              <span class="reply-from">From: <span>contact@hoblemercytech.com</span></span>
+              <div class="reply-actions">
+                <button class="action-btn" id="clearInboxReplyBtn"><i class="fas fa-xmark"></i> Clear</button>
+                <button class="send-btn"   id="sendInboxReplyBtn"><i class="fas fa-paper-plane"></i> Send</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+    </div>
+    <!-- end .content -->
+  </div>
+  <!-- end .main -->
+</div>
+<!-- end .dashboard -->
+
+
+<!-- ===== DELETE MODAL ===== -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Delete Message</h3>
+      <button class="modal-close" id="closeDeleteModal"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <p style="color:var(--text-2);font-size:0.9rem;line-height:1.7;">Are you sure you want to delete this message? This action cannot be undone.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn" id="cancelDelete">Cancel</button>
+      <button class="modal-btn danger" id="confirmDelete"><i class="fas fa-trash"></i> Delete</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== SEND PREVIEW MODAL ===== -->
+<div class="preview-modal-overlay" id="previewModal">
+  <div class="preview-modal">
+    <div class="preview-modal-header">
+      <h3><i class="fas fa-eye"></i> Email Preview</h3>
+      <button class="preview-modal-close" id="closePreviewModal"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="preview-modal-body">
+      <div class="email-preview-card">
+        <div class="email-preview-header">
+          <div class="email-preview-row"><strong>From:</strong><span>contact@hoblemercytech.com</span></div>
+          <div class="email-preview-row"><strong>To:</strong><span id="previewTo">—</span></div>
+          <div class="email-preview-row"><strong>Subject:</strong><span id="previewSubject">—</span></div>
+          <div class="email-preview-subject" id="previewSubjectLarge">—</div>
+        </div>
+        <div class="email-preview-body" id="previewBody">—</div>
+        <div class="email-preview-attachments" id="previewAttachWrap" style="display:none;">
+          <div class="preview-attach-label"><i class="fas fa-paperclip"></i> Attachments</div>
+          <div class="preview-attach-grid" id="previewAttachGrid"></div>
+        </div>
+      </div>
+    </div>
+    <div class="preview-modal-footer">
+      <span class="preview-note">
+        <i class="fas fa-circle-info" style="color:var(--violet);margin-right:4px;"></i>Review before sending
+      </span>
+      <div style="display:flex;gap:8px;">
+        <button class="preview-cancel-btn" id="cancelPreview">Edit</button>
+        <button class="preview-send-btn" id="confirmSendBtn">
+          <i class="fas fa-paper-plane"></i> Confirm & Send
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast">
+  <div class="toast-icon-wrap" id="toastIconWrap">
+    <i class="fas fa-check-circle" id="toastIcon"></i>
+  </div>
+  <div class="toast-body">
+    <div class="toast-title" id="toast-title">Success</div>
+    <div class="toast-msg"   id="toastMsg">Done</div>
+  </div>
+  <button class="toast-close" id="toastClose"><i class="fas fa-times"></i></button>
+  <div class="toast-progress" id="toastProgress"></div>
+</div>
+
+
+<script>
+
+  /* ── CONFIG ── */
+  const SUPABASE_URL      = 'https://kwxgaoyjbkawerguljtx.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3eGdhb3lqYmthd2VyZ3VsanR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4MDI1MTAsImV4cCI6MjA5NzM3ODUxMH0.v39YkkhMsfwBJwPWbSdDjqHRozV9h6FdEhtM5KxakVI';
+
+  /* ── STATE ── */
+  let SESSION_TOKEN  = localStorage.getItem('hmt_token') || null;
+  let allMessages    = [];
+  let allInboxEmails = [];
+  let allSentEmails  = [];
+  let activeId       = null;
+  let activeInboxId  = null;
+  let pendingSend    = null;
+  let toastTimer     = null;
+
+  /* ── ELEMENT SHORTHAND ── */
+  const $ = id => document.getElementById(id);
+
+  /* ── TOAST ── */
+  const TOAST_TYPES = {
+    ok:   { title:'Success', icon:'fa-check-circle',         cls:'toast--ok'   },
+    err:  { title:'Error',   icon:'fa-circle-exclamation',   cls:'toast--err'  },
+    warn: { title:'Warning', icon:'fa-triangle-exclamation', cls:'toast--warn' },
+    info: { title:'Info',    icon:'fa-circle-info',          cls:'toast--info' },
+  };
+
+  const showToast = (msg, type = 'ok') => {
+    const cfg = TOAST_TYPES[type] || TOAST_TYPES.ok;
+    $('toast').className             = `toast ${cfg.cls}`;
+    $('toastIcon').className         = `fas ${cfg.icon}`;
+    $('toast-title').textContent     = cfg.title;
+    $('toastMsg').textContent        = msg;
+    $('toastProgress').style.animation = 'none';
+    void $('toastProgress').offsetWidth;
+    $('toast').classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => $('toast').classList.remove('show'), 5000);
+  };
+
+  $('toastClose')?.addEventListener('click', () => {
+    $('toast').classList.remove('show');
+    clearTimeout(toastTimer);
+  });
+
+  /* ── API HELPERS ── */
+  const apiFetch = (path, opts = {}) =>
+    fetch(`${SUPABASE_URL}${path}`, {
+      ...opts,
+      headers: {
+        'apikey':        SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SESSION_TOKEN || SUPABASE_ANON_KEY}`,
+        'Content-Type':  'application/json',
+        ...(opts.headers || {}),
+      },
+    });
+
+  const edgeFetch = (fn, body) =>
+    fetch(`${SUPABASE_URL}/functions/v1/${fn}`, {
+      method:  'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': `Bearer ${SESSION_TOKEN || SUPABASE_ANON_KEY}`,
+      },
+      body: JSON.stringify(body),
+    });
+
+  /* ── DATE HELPERS ── */
+  const formatDate = iso => {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })
+         + ' · '
+         + d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+  };
+
+  const timeAgo = iso => {
+    if (!iso) return '—';
+    const m = Math.floor((Date.now() - new Date(iso)) / 60000);
+    if (m < 1)  return 'Just now';
+    if (m < 60) return `${m}m ago`;
+    const h = Math.floor(m / 60);
+    if (h < 24) return `${h}h ago`;
+    return Math.floor(h / 24) + 'd ago';
+  };
+
+  const initials = name => name
+    ? name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+    : '??';
+
+  /* ── UNIFIED STATS ── */
+  const updateStats = () => {
+    const msgTotal     = allMessages.length;
+    const msgUnread    = allMessages.filter(m => m.status === 'new').length;
+    const msgReplied   = allMessages.filter(m => m.status === 'replied').length;
+    const inboxUnread  = allInboxEmails.filter(e => e.status === 'unread').length;
+    const sentTotal    = allSentEmails.length;
+    const grandTotal   = msgTotal + allInboxEmails.length;
+
+    $('statTotal').textContent      = grandTotal;
+    $('statNew').textContent        = msgUnread;
+    $('statInboxUnread').textContent= inboxUnread;
+    $('statReplied').textContent    = msgReplied;
+    $('statSent').textContent       = sentTotal;
+
+    // Sidebar badges
+    const unreadBadge = $('unreadBadge');
+    if (unreadBadge) { unreadBadge.textContent = msgUnread; unreadBadge.style.display = msgUnread > 0 ? 'inline-block' : 'none'; }
+
+    const inboxBadge = $('inboxBadge');
+    if (inboxBadge) { inboxBadge.textContent = inboxUnread; inboxBadge.style.display = inboxUnread > 0 ? 'inline-block' : 'none'; }
+
+    const sentBadge = $('sentBadge');
+    if (sentBadge) { sentBadge.textContent = sentTotal; sentBadge.style.display = sentTotal > 0 ? 'inline-block' : 'none'; }
+  };
+
+  /* ── REAL-TIME SUBSCRIPTIONS (Supabase Realtime via WebSocket) ── */
+  let realtimeWS = null;
+
+  const connectRealtime = () => {
+    if (!SESSION_TOKEN) return;
+
+    // Supabase Realtime WebSocket
+    const wsUrl = SUPABASE_URL.replace('https://', 'wss://') + '/realtime/v1/websocket?apikey=' + SUPABASE_ANON_KEY + '&vsn=1.0.0';
+    realtimeWS  = new WebSocket(wsUrl);
+
+    realtimeWS.onopen = () => {
+      console.log('Realtime connected');
+
+      // Show live indicator
+      const indicator = document.createElement('span');
+      indicator.className = 'realtime-dot';
+      indicator.id        = 'realtimeDot';
+      const titleEl = $('pageTitle');
+      if (titleEl && !$('realtimeDot')) titleEl.parentNode.insertBefore(indicator, titleEl.nextSibling);
+
+      // Subscribe to messages table
+      realtimeWS.send(JSON.stringify({
+        topic:   'realtime:public:messages',
+        event:   'phx_join',
+        payload: { config: { broadcast: { self: true }, presence: { key: '' }, postgres_changes: [{ event: '*', schema: 'public', table: 'messages' }] } },
+        ref:     '1',
+      }));
+
+      // Subscribe to inbox table
+      realtimeWS.send(JSON.stringify({
+        topic:   'realtime:public:inbox',
+        event:   'phx_join',
+        payload: { config: { broadcast: { self: true }, presence: { key: '' }, postgres_changes: [{ event: '*', schema: 'public', table: 'inbox' }] } },
+        ref:     '2',
+      }));
+
+      // Subscribe to sent_emails table
+      realtimeWS.send(JSON.stringify({
+        topic:   'realtime:public:sent_emails',
+        event:   'phx_join',
+        payload: { config: { broadcast: { self: true }, presence: { key: '' }, postgres_changes: [{ event: '*', schema: 'public', table: 'sent_emails' }] } },
+        ref:     '3',
+      }));
+    };
+
+    realtimeWS.onmessage = e => {
+      try {
+        const msg = JSON.parse(e.data);
+        if (msg.event !== 'postgres_changes') return;
+
+        const { table, eventType, new: newRow, old: oldRow } = msg.payload.data || {};
+
+        if (table === 'messages') {
+          handleMessageRealtime(eventType, newRow, oldRow);
+        } else if (table === 'inbox') {
+          handleInboxRealtime(eventType, newRow, oldRow);
+        } else if (table === 'sent_emails') {
+          handleSentRealtime(eventType, newRow, oldRow);
+        }
+      } catch (_) {}
+    };
+
+    realtimeWS.onclose = () => {
+      console.log('Realtime disconnected — reconnecting in 3s');
+      const dot = $('realtimeDot');
+      if (dot) dot.style.background = 'var(--amber)';
+      setTimeout(connectRealtime, 3000);
+    };
+
+    realtimeWS.onerror = () => realtimeWS.close();
+  };
+
+  /* ── REALTIME HANDLERS ── */
+  const handleMessageRealtime = (type, newRow, oldRow) => {
+    if (type === 'INSERT') {
+      allMessages.unshift(newRow);
+      showToast(`New message from ${newRow.name}!`, 'info');
+      renderList(allMessages);
+    } else if (type === 'UPDATE') {
+      const idx = allMessages.findIndex(m => m.id === newRow.id);
+      if (idx !== -1) allMessages[idx] = newRow;
+      renderList(allMessages);
+    } else if (type === 'DELETE') {
+      allMessages = allMessages.filter(m => m.id !== oldRow.id);
+      renderList(allMessages);
+    }
+    updateStats();
+  };
+
+  const handleInboxRealtime = (type, newRow, oldRow) => {
+    if (type === 'INSERT') {
+      allInboxEmails.unshift(newRow);
+      showToast(`📬 New email from ${newRow.from_name || newRow.from_email}!`, 'info');
+      renderInboxList(allInboxEmails);
+    } else if (type === 'UPDATE') {
+      const idx = allInboxEmails.findIndex(e => e.id === newRow.id);
+      if (idx !== -1) allInboxEmails[idx] = newRow;
+      renderInboxList(allInboxEmails);
+    } else if (type === 'DELETE') {
+      allInboxEmails = allInboxEmails.filter(e => e.id !== oldRow.id);
+      renderInboxList(allInboxEmails);
+    }
+    updateStats();
+  };
+
+  const handleSentRealtime = (type, newRow, oldRow) => {
+    if (type === 'INSERT') {
+      allSentEmails.unshift(newRow);
+      renderSentList(allSentEmails);
+    } else if (type === 'DELETE') {
+      allSentEmails = allSentEmails.filter(s => s.id !== oldRow.id);
+      renderSentList(allSentEmails);
+    }
+    updateStats();
+  };
+
+  /* ── LOGIN ── */
+  const tryLogin = async () => {
+    const email    = $('loginEmail').value.trim();
+    const password = $('loginPassword').value;
+    if (!email || !password) { showLoginError('Please enter email and password.'); return; }
+
+    $('loginBtn').textContent = 'Signing in...';
+    $('loginBtn').disabled    = true;
+
+    const res  = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+      method:  'POST',
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ email, password }),
+    });
+    const data = await res.json();
+
+    $('loginBtn').textContent = 'Sign In';
+    $('loginBtn').disabled    = false;
+
+    if (data.access_token) {
+      SESSION_TOKEN = data.access_token;
+      localStorage.setItem('hmt_token', SESSION_TOKEN);
+      bootDashboard();
+    } else {
+      showLoginError(data.error_description || 'Invalid credentials.');
+    }
+  };
+
+  const showLoginError = msg => {
+    $('loginError').textContent   = msg;
+    $('loginError').style.display = 'block';
+  };
+
+  $('loginBtn')?.addEventListener('click', tryLogin);
+  $('loginPassword')?.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+
+  /* ── LOGOUT ── */
+  $('logoutBtn')?.addEventListener('click', () => {
+    if (realtimeWS) realtimeWS.close();
+    SESSION_TOKEN = null;
+    localStorage.removeItem('hmt_token');
+    location.reload();
+  });
+
+  /* ── NAVIGATION ── */
+  const pageTitles = {
+    messages: 'Messages',
+    inbox:    'Inbox',
+    sent:     'Sent Emails',
+    compose:  'Compose Email',
+    settings: 'Settings',
+  };
+
+  const navTo = page => {
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.page === page));
+    document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === `page-${page}`));
+    $('pageTitle').textContent = pageTitles[page] || page;
+    closeSidebar();
+  };
+
+  document.querySelectorAll('[data-page]').forEach(el => {
+    el.addEventListener('click', () => {
+      const page = el.dataset.page;
+      navTo(page);
+      if (page === 'sent')  renderSentList(allSentEmails);
+      if (page === 'inbox') renderInboxList(allInboxEmails);
+    });
+  });
+
+  /* ── SIDEBAR ── */
+  const closeSidebar = () => { $('sidebar')?.classList.remove('open'); if ($('sidebarOverlay')) $('sidebarOverlay').style.display = 'none'; };
+  $('menuToggle')?.addEventListener('click', () => { $('sidebar')?.classList.add('open'); if ($('sidebarOverlay')) $('sidebarOverlay').style.display = 'block'; });
+  $('sidebarOverlay')?.addEventListener('click', closeSidebar);
+
+  /* ── LOAD ALL DATA ── */
+  const loadAll = async () => {
+    await Promise.all([loadMessages(), loadInbox(), loadSentEmails()]);
+  };
+
+  /* ── MESSAGES ── */
+  const loadMessages = async () => {
+    $('msgList').innerHTML = '<div class="spinner-wrap"><div class="spinner"></div></div>';
+    const res  = await apiFetch('/rest/v1/messages?select=*&order=created_at.desc');
+    const data = await res.json();
+    if (!Array.isArray(data)) { $('msgList').innerHTML = '<div class="msg-empty"><i class="fas fa-triangle-exclamation"></i><p>Could not load messages.</p></div>'; return; }
+    allMessages = data;
+    updateStats();
+    renderList(data);
+  };
+
+  const renderList = data => {
+    if (!data.length) { $('msgList').innerHTML = '<div class="msg-empty"><i class="fas fa-inbox"></i><p>No messages yet</p></div>'; return; }
+    $('msgList').innerHTML = data.map(m => `
+      <div class="msg-item ${m.status === 'new' ? 'unread' : ''} ${m.id === activeId ? 'active' : ''}"
+           data-id="${m.id}" onclick="openMessage('${m.id}')">
+        <div class="msg-item-top">
+          <span class="msg-item-name">${m.name || '—'}</span>
+          <span class="msg-item-time">${timeAgo(m.created_at)}</span>
+        </div>
+        <div class="msg-item-service">${m.service || '—'}</div>
+        <div class="msg-item-preview">${(m.message || '').slice(0, 90)}</div>
+      </div>
+    `).join('');
+  };
+
+  const applyFilters = () => {
+    const q      = $('msgSearch')?.value.toLowerCase() || '';
+    const status = $('msgFilter')?.value || 'all';
+    const filtered = allMessages.filter(m => {
+      const matchQ = !q || (m.name||'').toLowerCase().includes(q) || (m.email||'').toLowerCase().includes(q) || (m.message||'').toLowerCase().includes(q) || (m.service||'').toLowerCase().includes(q);
+      const matchS = status === 'all' || m.status === status;
+      return matchQ && matchS;
+    });
+    renderList(filtered);
+  };
+
+  $('msgSearch')?.addEventListener('input', applyFilters);
+  $('msgFilter')?.addEventListener('change', applyFilters);
+
+  /* ── OPEN MESSAGE ── */
+  window.openMessage = async id => {
+    const msg = allMessages.find(m => m.id === id);
+    if (!msg) return;
+    activeId = id;
+
+    document.querySelectorAll('#msgList .msg-item').forEach(el => el.classList.toggle('active', el.dataset.id === id));
+    $('detailPlaceholder').style.display = 'none';
+    $('detailContent').style.display     = 'flex';
+
+    $('detailAvatar').textContent   = initials(msg.name);
+    $('detailName').textContent     = msg.name     || '—';
+    $('detailEmail').textContent    = msg.email    || '—';
+    $('detailService').textContent  = msg.service  || '—';
+    $('detailBudget').textContent   = msg.budget   || '—';
+    $('detailTimeline').textContent = msg.timeline || '—';
+    $('detailPhone').textContent    = msg.phone    || '—';
+    $('detailTime').textContent     = formatDate(msg.created_at);
+    $('detailDate').textContent     = formatDate(msg.created_at);
+    $('detailMessage').textContent  = msg.message  || '—';
+    $('replyToLabel').textContent   = `${msg.name} <${msg.email}>`;
+    $('replySubject').value         = `Re: Your Project Brief — HoblemercyTech`;
+
+    const statusEl = $('detailStatus');
+    statusEl.textContent = msg.status === 'new' ? 'Unread' : msg.status === 'read' ? 'Read' : 'Replied';
+    statusEl.className   = `status-badge ${msg.status}`;
+    $('detailStatusText').textContent = msg.status;
+
+    // Auto mark as read
+    if (msg.status === 'new') {
+      await apiFetch(`/rest/v1/messages?id=eq.${id}`, {
+        method: 'PATCH', headers: { 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ status: 'read' }),
+      });
+      msg.status = 'read';
+      statusEl.textContent = 'Read';
+      statusEl.className   = 'status-badge read';
+      $('detailStatusText').textContent = 'read';
+      updateStats();
+      applyFilters();
+      document.querySelectorAll('#msgList .msg-item').forEach(el => el.classList.toggle('active', el.dataset.id === id));
+    }
+  };
+
+  $('markReadBtn')?.addEventListener('click', async () => {
+    if (!activeId) return;
+    const msg = allMessages.find(m => m.id === activeId);
+    if (!msg) return;
+    const s = msg.status === 'replied' ? 'replied' : 'read';
+    await apiFetch(`/rest/v1/messages?id=eq.${activeId}`, { method:'PATCH', headers:{'Prefer':'return=minimal'}, body:JSON.stringify({ status:s }) });
+    msg.status = s;
+    $('detailStatus').textContent = s;
+    $('detailStatus').className   = `status-badge ${s}`;
+    updateStats(); renderList(allMessages);
+    showToast('Marked as read', 'ok');
+  });
+
+  /* ── DELETE ── */
+  $('deleteBtn')?.addEventListener('click', () => {
+    $('deleteModal').classList.add('open');
+    $('confirmDelete').dataset.target = 'message';
+  });
+  $('deleteInboxBtn')?.addEventListener('click', () => {
+    $('deleteModal').classList.add('open');
+    $('confirmDelete').dataset.target = 'inbox';
+  });
+  $('closeDeleteModal')?.addEventListener('click', () => $('deleteModal').classList.remove('open'));
+  $('cancelDelete')?.addEventListener('click',     () => $('deleteModal').classList.remove('open'));
+
+  $('confirmDelete')?.addEventListener('click', async () => {
+    const target = $('confirmDelete').dataset.target;
+
+    if (target === 'inbox') {
+      if (!activeInboxId) return;
+      await apiFetch(`/rest/v1/inbox?id=eq.${activeInboxId}`, { method:'DELETE' });
+      allInboxEmails = allInboxEmails.filter(e => e.id !== activeInboxId);
+      activeInboxId  = null;
+      $('inboxDetailContent').style.display     = 'none';
+      $('inboxDetailPlaceholder').style.display = 'flex';
+      renderInboxList(allInboxEmails);
+      showToast('Email deleted', 'ok');
+    } else {
+      if (!activeId) return;
+      await apiFetch(`/rest/v1/messages?id=eq.${activeId}`, { method:'DELETE' });
+      allMessages = allMessages.filter(m => m.id !== activeId);
+      activeId    = null;
+      $('detailContent').style.display     = 'none';
+      $('detailPlaceholder').style.display = 'flex';
+      renderList(allMessages);
+      showToast('Message deleted', 'ok');
+    }
+
+    $('deleteModal').classList.remove('open');
+    updateStats();
+  });
+
+  /* ── INBOX ── */
+  const loadInbox = async () => {
+    const list = $('inboxList');
+    if (list) list.innerHTML = '<div class="spinner-wrap"><div class="spinner"></div></div>';
+    const res  = await apiFetch('/rest/v1/inbox?select=*&order=received_at.desc');
+    const data = await res.json();
+    if (!Array.isArray(data)) {
+      if (list) list.innerHTML = '<div class="msg-empty"><i class="fas fa-triangle-exclamation"></i><p>Could not load inbox.</p></div>';
+      return;
+    }
+    allInboxEmails = data;
+    updateStats();
+    renderInboxList(data);
+  };
+
+  const renderInboxList = data => {
+    const list = $('inboxList');
+    if (!list) return;
+    if (!data.length) {
+      list.innerHTML = '<div class="msg-empty"><i class="fas fa-envelope-open"></i><p>No emails received yet.<br>Replies from companies appear here.</p></div>';
+      return;
+    }
+    list.innerHTML = data.map(e => `
+      <div class="msg-item inbox-item ${e.status === 'unread' ? 'unread' : ''} ${e.id === activeInboxId ? 'active' : ''}"
+           data-id="${e.id}" onclick="openInboxEmail('${e.id}')">
+        <div class="msg-item-top">
+          <span class="msg-item-name">${e.from_name || e.from_email || '—'}</span>
+          <span class="msg-item-time">${timeAgo(e.received_at)}</span>
+        </div>
+        <div class="msg-item-service" style="color:var(--blue);">${e.subject || '(no subject)'}</div>
+        <div class="msg-item-preview">${(e.body_text || '').slice(0, 90) || '(empty)'}</div>
+      </div>
+    `).join('');
+  };
+
+  /* ── OPEN INBOX EMAIL ── */
+  window.openInboxEmail = async id => {
+    const email = allInboxEmails.find(e => e.id === id);
+    if (!email) return;
+    activeInboxId = id;
+
+    document.querySelectorAll('#inboxList .msg-item').forEach(el => el.classList.toggle('active', el.dataset.id === id));
+
+    $('inboxDetailPlaceholder').style.display = 'none';
+    $('inboxDetailContent').style.display     = 'flex';
+    $('inboxReplyBox').style.display          = 'none';
+
+    // Fill all fields — guard against null/empty
+    $('inboxAvatar').textContent    = initials(email.from_name || email.from_email);
+    $('inboxFromName').textContent  = email.from_name  || email.from_email || '—';
+    $('inboxFromEmail').textContent = email.from_email || '—';
+    $('inboxMetaFrom').textContent  = email.from_name
+      ? `${email.from_name} <${email.from_email}>`
+      : email.from_email || '—';
+    $('inboxMetaTo').textContent    = email.to_email   || 'contact@hoblemercytech.com';
+    $('inboxSubject').textContent   = email.subject    || '(no subject)';
+    $('inboxBody').textContent      = email.body_text  || email.body_html?.replace(/<[^>]*>/g,'') || '(empty message)';
+    $('inboxDate').textContent      = formatDate(email.received_at);
+    $('inboxReplySubject').value    = `Re: ${email.subject || ''}`;
+
+    const statusEl = $('inboxStatus');
+    statusEl.textContent = email.status === 'unread' ? 'Unread' : 'Read';
+    statusEl.className   = `status-badge ${email.status}`;
+
+    // Auto mark as read
+    if (email.status === 'unread') {
+      await apiFetch(`/rest/v1/inbox?id=eq.${id}`, {
+        method: 'PATCH', headers: { 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ status: 'read' }),
+      });
+      email.status         = 'read';
+      statusEl.textContent = 'Read';
+      statusEl.className   = 'status-badge read';
+      updateStats();
+      renderInboxList(allInboxEmails);
+      document.querySelectorAll('#inboxList .msg-item').forEach(el => el.classList.toggle('active', el.dataset.id === id));
+    }
+  };
+
+  $('markInboxReadBtn')?.addEventListener('click', async () => {
+    if (!activeInboxId) return;
+    const email = allInboxEmails.find(e => e.id === activeInboxId);
+    if (!email) return;
+    await apiFetch(`/rest/v1/inbox?id=eq.${activeInboxId}`, { method:'PATCH', headers:{'Prefer':'return=minimal'}, body:JSON.stringify({ status:'read' }) });
+    email.status = 'read';
+    $('inboxStatus').textContent = 'Read';
+    $('inboxStatus').className   = 'status-badge read';
+    updateStats(); renderInboxList(allInboxEmails);
+    showToast('Marked as read', 'ok');
+  });
+
+  $('replyInboxBtn')?.addEventListener('click', () => {
+    const box = $('inboxReplyBox');
+    if (!box) return;
+    box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    if (box.style.display === 'block') $('inboxReplyBody')?.focus();
+  });
+
+  $('closeInboxReply')?.addEventListener('click', () => { if ($('inboxReplyBox')) $('inboxReplyBox').style.display = 'none'; });
+
+  $('clearInboxReplyBtn')?.addEventListener('click', () => {
+    if ($('inboxReplyBody'))  $('inboxReplyBody').value  = '';
+    if ($('inboxReplyLink'))  $('inboxReplyLink').value  = '';
+    attachedFiles.inbox = [];
+    rebuildPreviews('inbox');
+  });
+
+  $('sendInboxReplyBtn')?.addEventListener('click', async () => {
+    const email = allInboxEmails.find(e => e.id === activeInboxId);
+    if (!email) return;
+    const subject = $('inboxReplySubject')?.value.trim();
+    const body    = $('inboxReplyBody')?.value.trim();
+    const link    = $('inboxReplyLink')?.value.trim() || '';
+    if (!subject || !body) { showToast('Subject and message are required.', 'err'); return; }
+    await openPreview({ to: email.from_email, subject, body, link, ctx: 'inbox' });
+    pendingSend = async () => {
+      await doSend({
+        to: email.from_email, name: email.from_name || email.from_email,
+        subject, body, link, ctx: 'inbox',
+        onSuccess: () => {
+          if ($('inboxReplyBody'))  $('inboxReplyBody').value  = '';
+          if ($('inboxReplyLink'))  $('inboxReplyLink').value  = '';
+          if ($('inboxReplyBox'))   $('inboxReplyBox').style.display = 'none';
+          attachedFiles.inbox = [];
+          rebuildPreviews('inbox');
+          showToast(`Reply sent ✅`, 'ok');
+        },
+      });
+    };
+  });
+
+  // Inbox search/filter
+  const applyInboxFilters = () => {
+    const q = $('inboxSearch')?.value.toLowerCase() || '';
+    const f = $('inboxFilter')?.value || 'all';
+    const filtered = allInboxEmails.filter(e => {
+      const matchQ = !q || (e.from_email||'').toLowerCase().includes(q) || (e.from_name||'').toLowerCase().includes(q) || (e.subject||'').toLowerCase().includes(q) || (e.body_text||'').toLowerCase().includes(q);
+      const matchF = f === 'all' || e.status === f;
+      return matchQ && matchF;
+    });
+    renderInboxList(filtered);
+  };
+  $('inboxSearch')?.addEventListener('input', applyInboxFilters);
+  $('inboxFilter')?.addEventListener('change', applyInboxFilters);
+  $('refreshInboxBtn')?.addEventListener('click', loadInbox);
+
+  /* ── SENT EMAILS ── */
+  const loadSentEmails = async () => {
+    const res  = await apiFetch('/rest/v1/sent_emails?select=*&order=sent_at.desc');
+    const data = await res.json();
+    if (!Array.isArray(data)) return;
+    allSentEmails = data;
+    updateStats();
+    renderSentList(data);
+  };
+
+  const renderSentList = data => {
+    const list = $('sentList');
+    if (!list) return;
+    if (!data.length) {
+      list.innerHTML = '<div class="sent-empty"><i class="fas fa-paper-plane"></i><p>No sent emails yet.</p></div>';
+      return;
+    }
+    list.innerHTML = data.map(s => {
+      const av = (s.to_name || s.to_email || '??').split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
+      const hasAttach = s.attachment_count > 0;
+      const hasLink   = s.link && s.link.trim();
+      return `
+        <div class="sent-card type-${s.type}" data-id="${s.id}" onclick="toggleSentCard('${s.id}')">
+          <div class="sent-card-top">
+            <div class="sent-card-left">
+              <div class="sent-avatar ${s.type}">${av}</div>
+              <div style="min-width:0;">
+                <div class="sent-to">${s.to_name || s.to_email}</div>
+                <div class="sent-to-email">${s.to_email}</div>
+              </div>
+            </div>
+            <div class="sent-card-right">
+              <span class="sent-time">${timeAgo(s.sent_at)}</span>
+              <span class="sent-type-badge ${s.type}">
+                <i class="fas ${s.type==='reply'?'fa-reply':'fa-pen'}"></i>
+                ${s.type === 'reply' ? 'Reply' : 'Composed'}
+              </span>
+            </div>
+          </div>
+          <div class="sent-subject">${s.subject}</div>
+          <div class="sent-preview">${s.body}</div>
+          ${(hasAttach||hasLink) ? `
+            <div class="sent-card-footer">
+              ${hasAttach ? `<span class="sent-attach-count"><i class="fas fa-paperclip"></i> ${s.attachment_count} attachment${s.attachment_count>1?'s':''}</span>` : ''}
+              ${hasLink   ? `<a href="${s.link}" target="_blank" rel="noopener" class="sent-link-chip" onclick="event.stopPropagation()"><i class="fas fa-link"></i>${s.link}</a>` : ''}
+            </div>` : ''}
+          <div class="sent-card-body">
+            <div class="sent-full-message">${s.body}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  };
+
+  window.toggleSentCard = id => {
+    document.querySelector(`.sent-card[data-id="${id}"]`)?.classList.toggle('expanded');
+  };
+
+  const applySentFilters = () => {
+    const q = $('sentSearch')?.value.toLowerCase() || '';
+    const f = document.querySelector('.sent-filter-btn.active')?.dataset.sentFilter || 'all';
+    const filtered = allSentEmails.filter(s => {
+      const matchQ = !q || s.subject.toLowerCase().includes(q) || s.to_email.toLowerCase().includes(q) || (s.to_name||'').toLowerCase().includes(q) || s.body.toLowerCase().includes(q);
+      const matchF = f === 'all' || s.type === f;
+      return matchQ && matchF;
+    });
+    renderSentList(filtered);
+  };
+
+  $('sentSearch')?.addEventListener('input', applySentFilters);
+  document.querySelectorAll('.sent-filter-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.sent-filter-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      applySentFilters();
+    });
+  });
+
+  /* ── ATTACHMENTS ── */
+  const attachedFiles = { reply: [], compose: [], inbox: [] };
+
+  const fileToBase64 = f => new Promise((res,rej) => { const r=new FileReader(); r.onload=()=>res(r.result.split(',')[1]); r.onerror=rej; r.readAsDataURL(f); });
+  const fileToDataURL = f => new Promise((res,rej) => { const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(f); });
+  const fmtSize = b => b<1024?b+' B':b<1048576?(b/1024).toFixed(1)+' KB':(b/1048576).toFixed(1)+' MB';
+
+  const fileIconCls = name => {
+    const ext = name.split('.').pop().toLowerCase();
+    if (ext==='pdf')                        return { cls:'fa-file-pdf',        color:'pdf'   };
+    if (['doc','docx'].includes(ext))       return { cls:'fa-file-word',       color:'doc'   };
+    if (['xls','xlsx'].includes(ext))       return { cls:'fa-file-excel',      color:'xls'   };
+    if (['ppt','pptx'].includes(ext))       return { cls:'fa-file-powerpoint', color:'ppt'   };
+    if (['zip','rar','7z'].includes(ext))   return { cls:'fa-file-zipper',     color:'zip'   };
+    return { cls:'fa-file', color:'other' };
+  };
+
+  const isImg = f => f.type.startsWith('image/');
+  const isVid = f => f.type.startsWith('video/');
+
+  const renderPreviewItem = (file, ctx, index) => {
+    const wrap = document.createElement('div');
+    wrap.className    = `attach-preview-item ${(isImg(file)||isVid(file))?'is-media':'is-file'}`;
+    wrap.dataset.index = index;
+    wrap.title        = file.name;
+    if (isImg(file)) {
+      const img = document.createElement('img'); img.src=URL.createObjectURL(file); img.alt=file.name; wrap.appendChild(img);
+    } else if (isVid(file)) {
+      const vid = document.createElement('video'); vid.src=URL.createObjectURL(file); vid.muted=true; wrap.appendChild(vid);
+      const b = document.createElement('div'); b.className='video-badge'; b.innerHTML='<i class="fas fa-play"></i>'; wrap.appendChild(b);
+    } else {
+      const ic = fileIconCls(file.name);
+      wrap.innerHTML = `<i class="fas ${ic.cls} file-icon ${ic.color}"></i><div class="file-info"><span class="file-name" title="${file.name}">${file.name}</span><span class="file-size">${fmtSize(file.size)}</span></div>`;
+    }
+    const rm = document.createElement('button'); rm.className='attach-remove'; rm.innerHTML='<i class="fas fa-xmark"></i>'; rm.title='Remove';
+    rm.onclick = e => { e.stopPropagation(); attachedFiles[ctx].splice(index,1); rebuildPreviews(ctx); };
+    wrap.appendChild(rm);
+    return wrap;
+  };
+
+  const rebuildPreviews = ctx => {
+    const ids = { reply:'replyPreviews', compose:'composePreviews', inbox:'inboxPreviews' };
+    const box = document.getElementById(ids[ctx]);
+    if (!box) return;
+    box.innerHTML = '';
+    attachedFiles[ctx].forEach((f,i) => box.appendChild(renderPreviewItem(f,ctx,i)));
+  };
+
+  const MAX_SIZE=10*1024*1024, MAX_FILES=5;
+  const addFiles = (files,ctx) => {
+    Array.from(files).forEach(f => {
+      if (f.size>MAX_SIZE)                      { showToast(`${f.name} exceeds 10MB`,'warn'); return; }
+      if (attachedFiles[ctx].length>=MAX_FILES) { showToast('Max 5 attachments','warn'); return; }
+      attachedFiles[ctx].push(f);
+    });
+    rebuildPreviews(ctx);
+  };
+
+  const setupDropZone = (zoneId, inputId, ctx) => {
+    const zone=document.getElementById(zoneId), input=document.getElementById(inputId);
+    if (!zone||!input) return;
+    zone.addEventListener('click', e=>{ if(e.target.tagName!=='LABEL') input.click(); });
+    input.addEventListener('change', ()=>{ addFiles(input.files,ctx); input.value=''; });
+    zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', ()=>zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e=>{ e.preventDefault(); zone.classList.remove('drag-over'); addFiles(e.dataTransfer.files,ctx); });
+  };
+
+  setupDropZone('replyAttachZone',   'replyFileInput',   'reply');
+  setupDropZone('composeAttachZone', 'composeFileInput', 'compose');
+  setupDropZone('inboxAttachZone',   'inboxFileInput',   'inbox');
+
+  const buildAttachments = async ctx =>
+    Promise.all(attachedFiles[ctx].map(async f => ({ filename:f.name, content:await fileToBase64(f), type:f.type||'application/octet-stream' })));
+
+  /* ── PREVIEW MODAL ── */
+  const openPreview = async ({ to, subject, body, link, ctx }) => {
+    const fullBody = link ? `${body}\n\n🔗 Link: ${link}` : body;
+    $('previewTo').textContent           = to;
+    $('previewSubject').textContent      = subject;
+    $('previewSubjectLarge').textContent = subject;
+    $('previewBody').textContent         = fullBody;
+
+    const grid=document.getElementById('previewAttachGrid'), wrap=document.getElementById('previewAttachWrap');
+    const files = attachedFiles[ctx] || [];
+    grid.innerHTML='';
+    if (files.length>0) {
+      wrap.style.display='block';
+      for (const f of files) {
+        if (isImg(f)) {
+          const url=await fileToDataURL(f), img=document.createElement('img');
+          img.src=url; img.className='preview-attach-thumb'; img.title=f.name; grid.appendChild(img);
+        } else {
+          const ic=isVid(f)?{cls:'fa-film',color:''}:fileIconCls(f.name);
+          const chip=document.createElement('div'); chip.className='preview-attach-chip';
+          chip.innerHTML=`<i class="fas ${ic.cls} file-icon ${ic.color}" style="font-size:1rem;"></i><span>${f.name}</span><span style="color:var(--text-3);font-size:0.7rem;">${fmtSize(f.size)}</span>`;
+          grid.appendChild(chip);
+        }
+      }
+    } else { wrap.style.display='none'; }
+    $('previewModal').classList.add('open');
+  };
+
+  $('closePreviewModal')?.addEventListener('click', () => { $('previewModal').classList.remove('open'); pendingSend=null; });
+  $('cancelPreview')?.addEventListener('click',     () => { $('previewModal').classList.remove('open'); pendingSend=null; });
+
+  $('confirmSendBtn')?.addEventListener('click', async () => {
+    if (!pendingSend) return;
+    const btn=$('confirmSendBtn');
+    btn.classList.add('sending'); btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Sending...';
+    await pendingSend();
+    btn.classList.remove('sending'); btn.innerHTML='<i class="fas fa-paper-plane"></i> Confirm & Send';
+    $('previewModal').classList.remove('open'); pendingSend=null;
+  });
+
+  /* ── SEND CORE ── */
+  const doSend = async ({ to, name, subject, body, link, ctx, onSuccess }) => {
+    try {
+      const attachments     = await buildAttachments(ctx);
+      const fullBody        = link ? `${body}\n\n🔗 Link: ${link}` : body;
+      const attachmentCount = attachments.length;
+
+      const res  = await edgeFetch('send-reply', { to, name, subject, body:fullBody, attachments });
+      const data = await res.json().catch(()=>({}));
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+
+      // Save to sent_emails
+      const msgRef = (ctx==='reply' && activeId) ? activeId : null;
+      await apiFetch('/rest/v1/sent_emails', {
+        method:'POST', headers:{'Prefer':'return=minimal'},
+        body: JSON.stringify({
+          to_email: to, to_name: name!==to ? name : null,
+          subject, body: fullBody, link: link||null,
+          type: ctx==='reply'?'reply':'compose',
+          attachment_count: attachmentCount,
+          message_id: msgRef,
+          sent_at: new Date().toISOString(),
+        }),
+      });
+
+      onSuccess();
+    } catch (err) {
+      console.error('Send error:', err);
+      showToast(`Send failed: ${err.message}`, 'err');
+    }
+  };
+
+  /* ── REPLY (messages) ── */
+  $('sendReplyBtn')?.addEventListener('click', async () => {
+    const msg = allMessages.find(m => m.id === activeId); if (!msg) return;
+    const subject=$('replySubject').value.trim(), body=$('replyBody').value.trim(), link=$('replyLink')?.value.trim()||'';
+    if (!subject||!body) { showToast('Subject and message are required.','err'); return; }
+    await openPreview({ to:msg.email, subject, body, link, ctx:'reply' });
+    pendingSend = async () => {
+      await doSend({ to:msg.email, name:msg.name, subject, body, link, ctx:'reply',
+        onSuccess: async () => {
+          await apiFetch(`/rest/v1/messages?id=eq.${activeId}`, { method:'PATCH', headers:{'Prefer':'return=minimal'}, body:JSON.stringify({ status:'replied', replied_at:new Date().toISOString(), reply_sent:true }) });
+          msg.status='replied'; msg.reply_sent=true;
+          $('detailStatus').textContent='Replied'; $('detailStatus').className='status-badge replied';
+          $('replyBody').value=''; $('replySubject').value='Re: Your Project Brief — HoblemercyTech'; if($('replyLink'))$('replyLink').value='';
+          attachedFiles.reply=[]; rebuildPreviews('reply');
+          updateStats(); renderList(allMessages);
+          showToast(`Reply sent to ${msg.name} ✅`,'ok');
+        },
+      });
+    };
+  });
+
+  $('clearReplyBtn')?.addEventListener('click', () => {
+    $('replyBody').value=''; $('replySubject').value='Re: Your Project Brief — HoblemercyTech'; if($('replyLink'))$('replyLink').value='';
+    attachedFiles.reply=[]; rebuildPreviews('reply');
+  });
+
+  /* ── COMPOSE ── */
+  $('sendComposeBtn')?.addEventListener('click', async () => {
+    const to=$('composeTo').value.trim(), subject=$('composeSubject').value.trim(), body=$('composeBody').value.trim(), link=$('composeLink')?.value.trim()||'';
+    if (!to||!subject||!body) { showToast('To, Subject and Message are required.','err'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) { showToast('Invalid email address.','err'); return; }
+    await openPreview({ to, subject, body, link, ctx:'compose' });
+    pendingSend = async () => {
+      await doSend({ to, name:to, subject, body, link, ctx:'compose',
+        onSuccess: () => {
+          $('composeTo').value=''; $('composeSubject').value=''; $('composeBody').value=''; if($('composeLink'))$('composeLink').value='';
+          attachedFiles.compose=[]; rebuildPreviews('compose');
+          showToast('Email sent successfully ✅','ok');
+        },
+      });
+    };
+  });
+
+  $('clearComposeBtn')?.addEventListener('click', () => {
+    $('composeTo').value=''; $('composeSubject').value=''; $('composeBody').value=''; if($('composeLink'))$('composeLink').value='';
+    attachedFiles.compose=[]; rebuildPreviews('compose');
+  });
+
+  /* ── REFRESH ── */
+  $('refreshBtn')?.addEventListener('click', loadAll);
+
+  /* ── SETTINGS ── */
+  $('changePassBtn')?.addEventListener('click', async () => {
+    const curr=$('currPass').value, newP=$('newPass').value, confirm=$('confirmPass').value;
+    if (!curr||!newP||!confirm) { showToast('All fields required.','err'); return; }
+    if (newP!==confirm) { showToast('Passwords do not match.','err'); return; }
+    if (newP.length<8)  { showToast('Minimum 8 characters.','err'); return; }
+    const res=await fetch(`${SUPABASE_URL}/auth/v1/user`,{ method:'PUT', headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':`Bearer ${SESSION_TOKEN}`,'Content-Type':'application/json'}, body:JSON.stringify({password:newP}) });
+    if (res.ok) { $('currPass').value=''; $('newPass').value=''; $('confirmPass').value=''; showToast('Password updated ✅','ok'); }
+    else showToast('Update failed.','err');
+  });
+
+  $('saveEmailSettings')?.addEventListener('click', () => {
+    localStorage.setItem('hmt_from_name',   $('settingsFromName').value);
+    localStorage.setItem('hmt_notif_email', $('settingsNotifEmail').value);
+    showToast('Settings saved ✅','ok');
+  });
+
+  /* ── BOOT ── */
+  const bootDashboard = async () => {
+    $('loginScreen').classList.add('hidden');
+    $('dashboard').classList.remove('hidden');
+    await loadAll();
+    connectRealtime();
+  };
+
+  /* ── AUTO LOGIN ── */
+  if (SESSION_TOKEN) {
+    fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      headers:{ 'apikey':SUPABASE_ANON_KEY, 'Authorization':`Bearer ${SESSION_TOKEN}` },
+    }).then(r => {
+      if (r.ok) bootDashboard();
+      else { SESSION_TOKEN=null; localStorage.removeItem('hmt_token'); }
+    });
+  }
+  
+  // ── SERVICE WORKER REGISTRATION ───────────────────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+      console.log('SW registered:', reg.scope);
+      
+      // Check for updates every 60 seconds
+      setInterval(() => reg.update(), 60000);
+      
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            showToast('Dashboard updated — refresh to get latest version', 'info');
+          }
+        });
+      });
+      
+    } catch (err) {
+      console.warn('SW registration failed:', err);
+    }
+  });
+}
+
+// ── PWA INSTALL PROMPT ────────────────────────────────────────
+let deferredInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  
+  // Show install banner after 3 seconds if not already installed
+  setTimeout(() => {
+    if (deferredInstallPrompt) showInstallBanner();
+  }, 3000);
+});
+
+const showInstallBanner = () => {
+  // Don't show if already dismissed this session
+  if (sessionStorage.getItem('pwa-dismissed')) return;
+  
+  const banner = document.createElement('div');
+  banner.id = 'pwa-banner';
+  banner.innerHTML = `
+    <div style="
+      position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
+      background:var(--bg-card); border:1px solid var(--violet);
+      border-radius:16px; padding:16px 20px;
+      box-shadow:0 8px 32px rgba(0,0,0,0.5), var(--glow);
+      z-index:9998; display:flex; align-items:center; gap:14px;
+      max-width:340px; width:calc(100% - 32px);
+      animation:slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    ">
+      <img src="icons/icon-72.png" alt="HMT" style="width:44px;height:44px;border-radius:10px;flex-shrink:0;"
+           onerror="this.style.display='none'">
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:3px;">Install Dashboard</div>
+        <div style="font-size:0.78rem;color:var(--text-2);">Add to home screen for quick access</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:7px;flex-shrink:0;">
+        <button onclick="installPWA()" style="
+          padding:8px 16px; background:linear-gradient(135deg,var(--violet),var(--fuchsia));
+          color:#fff; border:none; border-radius:999px;
+          font-size:0.8rem; font-weight:600; cursor:pointer; white-space:nowrap;
+        ">Install</button>
+        <button onclick="dismissInstall()" style="
+          padding:6px 16px; background:none; border:1px solid var(--border);
+          color:var(--text-2); border-radius:999px;
+          font-size:0.75rem; cursor:pointer; white-space:nowrap;
+        ">Not now</button>
+      </div>
+    </div>
+    <style>
+      @keyframes slideUp {
+        from { opacity:0; transform:translateX(-50%) translateY(20px); }
+        to   { opacity:1; transform:translateX(-50%) translateY(0); }
+      }
+    </style>
+  `;
+  document.body.appendChild(banner);
+};
+
+window.installPWA = async () => {
+  if (!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  const { outcome } = await deferredInstallPrompt.userChoice;
+  console.log('PWA install outcome:', outcome);
+  deferredInstallPrompt = null;
+  const banner = document.getElementById('pwa-banner');
+  if (banner) banner.remove();
+  if (outcome === 'accepted') showToast('Dashboard installed! ✅', 'ok');
+};
+
+window.dismissInstall = () => {
+  sessionStorage.setItem('pwa-dismissed', '1');
+  const banner = document.getElementById('pwa-banner');
+  if (banner) banner.remove();
+};
+
+// Hide install banner if already installed as PWA
+window.addEventListener('appinstalled', () => {
+  deferredInstallPrompt = null;
+  const banner = document.getElementById('pwa-banner');
+  if (banner) banner.remove();
+  showToast('Dashboard installed successfully ✅', 'ok');
+});
+
+</script>
+
+</body>
+</html>
