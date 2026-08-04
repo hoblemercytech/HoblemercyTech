@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://hoblemercytech.com/sitemap.xml
