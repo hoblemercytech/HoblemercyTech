@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary SEO -->
+  <title>Projects &amp; Portfolio | HoblemercyTech</title>
+  <meta name="description" content="Explore web applications, SaaS platforms, AI solutions, mobile apps, branding projects, creative technology and engineering solutions built by HoblemercyTech.">
+  <meta name="author" content="HoblemercyTech">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#8A2BE2">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://hoblemercytech.dev/projects.html">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Manifest -->
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Projects &amp; Portfolio | HoblemercyTech">
+  <meta property="og:description" content="Explore web applications, SaaS platforms, AI solutions, mobile apps, branding projects, creative technology and engineering solutions built by HoblemercyTech.">
+  <meta property="og:url" content="https://hoblemercytech.dev/projects.html">
+  <meta property="og:site_name" content="HoblemercyTech">
+  <meta property="og:locale" content="en_NG">
+  <meta property="og:image" content="https://hoblemercytech.dev/og-image.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Projects &amp; Portfolio | HoblemercyTech">
+  <meta name="twitter:description" content="Web apps, SaaS platforms, AI solutions, branding and engineering projects by HoblemercyTech.">
+  <meta name="twitter:image" content="https://hoblemercytech.dev/og-image.webp">
+  <meta name="twitter:site" content="@hoblemercytech">
+  <meta name="twitter:creator" content="@hoblemercytech">
+
+  <!-- Apply saved theme before paint (same localStorage key as homepage) -->
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Site CSS (same order as homepage: hero-fixes first, then main styles) -->
+  <link rel="stylesheet" href="hero-fixes.css">
+  <link rel="stylesheet" href="site.css">
+
+  <!-- Page-specific additions (only what the shared styles don't cover) -->
+  <style>
+    .portfolio-hero {
+      text-align: center;
+      background:
+        radial-gradient(ellipse at 70% 0%, rgba(124,58,237,0.13), transparent 55%),
+        radial-gradient(ellipse at 5% 90%, rgba(99,102,241,0.09), transparent 50%);
+    }
+    .portfolio-hero .section-eyebrow { justify-content: center; }
+    .portfolio-hero .section-subtitle { margin-left: auto; margin-right: auto; margin-bottom: 0; }
+    .portfolio-hero .about-stats { margin-top: 36px; }
+    .projects-status { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: -20px 0 28px; }
+    .nav-links a[aria-current="page"],
+    .sidenav ul li a[aria-current="page"] { color: var(--fuchsia); }
+    /* Centered CTA: homepage gradient darkens mid-page in light mode, so use the services-section wash instead */
+    .cta-section.portfolio-cta {
+      background:
+        radial-gradient(circle at 10% 15%, rgba(124,58,237,0.09), transparent 40%),
+        radial-gradient(circle at 90% 85%, rgba(99,102,241,0.08), transparent 40%),
+        var(--bg-muted);
+      border-top: 1px solid var(--border-color);
+    }
+    [data-theme="dark"] .cta-section.portfolio-cta { background: linear-gradient(135deg, var(--bg-primary), #0a0618); }
+    .portfolio-cta .cta-content { max-width: 720px; margin: 0 auto; text-align: center; position: relative; z-index: 2; }
+    .portfolio-cta .cta-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+    .cta-btn--outline { background: var(--bg-secondary); color: var(--text-primary); border: 1.5px solid var(--border-color); box-shadow: var(--shadow-sm); }
+    @media (max-width: 480px) {
+      .portfolio-cta .cta-actions { flex-direction: column; align-items: stretch; }
+      .portfolio-cta .cta-btn { justify-content: center; padding: 15px 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="premium-loader" class="premium-loader">
+  <div style="text-align:center;">
+    <i class="fas fa-graduation-cap" style="font-size:56px;color:var(--violet);"></i>
+    <div class="spinner"></div>
+    <h2 class="loader-title">Hoblemercy <span class="tech">Tech</span></h2>
+    <p class="loader-text">Preparing your experience...</p>
+  </div>
+</div>
+
+<!-- CURSOR GLOW -->
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- HEADER -->
+<header class="header">
+  <a href="index.html" class="logo-text">Hoblemercy<span>Tech</span></a>
+  <nav class="nav-links" aria-label="Primary navigation">
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#services">Services</a>
+    <a href="projects.html" aria-current="page">Projects</a>
+    <a href="index.html#pricing">Pricing</a>
+    <a href="index.html#testimonials">Reviews</a>
+    <a href="index.html#contact">Contact</a>
+  </nav>
+  <div class="header-icons">
+    <button id="themeToggle" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+    <button class="menu-icon" id="menuBtn" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+  </div>
+</header>
+
+<!-- SIDENAV -->
+<aside class="sidenav" id="sidenav" aria-hidden="true" aria-label="Mobile navigation">
+  <div class="sidenav-header">
+    <div class="sidenav-logo">Hoblemercy<span>Tech</span></div>
+    <button class="close-btn" id="closeBtn" aria-label="Close menu"><i class="fas fa-times"></i></button>
+  </div>
+  <ul>
+    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+    <li><a href="index.html#about"><i class="fas fa-user"></i> About</a></li>
+    <li><a href="index.html#services"><i class="fas fa-layer-group"></i> Services</a></li>
+    <li><a href="projects.html" aria-current="page"><i class="fas fa-briefcase"></i> Projects</a></li>
+    <li><a href="index.html#pricing"><i class="fas fa-tag"></i> Pricing</a></li>
+    <li><a href="index.html#testimonials"><i class="fas fa-star"></i> Reviews</a></li>
+    <li><a href="index.html#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+  </ul>
+  <div class="sidenav-actions" style="margin-top: 50%;">
+    <a href="#projects" class="btn-pill btn-pill-primary"><i class="fas fa-briefcase"></i> Projects</a>
+    <a href="https://hoblemercytechacademy.vercel.app" target="_blank" rel="noopener" class="btn-pill btn-pill-secondary"><i class="fas fa-graduation-cap"></i> Academy</a>
+  </div>
+</aside>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announcement-bar" aria-hidden="true">
+  <div class="announcement-track">
+    <span>
+      🚀 HoblemercyTech • Business Growth Solutions • Website & App Development •
+      AI Automation • AI Content Creation • Branding & Graphic Design •
+      UI/UX Design • Online Stores • Business Consultation •
+      Structural Engineering • Digital Solutions •
+    </span>
+    <span>
+      🚀 HoblemercyTech • Business Growth Solutions • Website & App Development •
+      AI Automation • AI Content Creation • Branding & Graphic Design •
+      UI/UX Design • Online Stores • Business Consultation •
+      Structural Engineering • Digital Solutions •
+    </span>
+  </div>
+</div>
+
+<main>
+
+<!-- PORTFOLIO HERO -->
+<section class="section-wrap portfolio-hero" aria-labelledby="portfolioTitle">
+  <div class="container-lg">
+    <div class="section-eyebrow reveal">
+      <i class="fas fa-layer-group"></i> Our Portfolio
+    </div>
+
+    <h1 class="section-title reveal" id="portfolioTitle">Solutions We've Delivered</h1>
+
+    <p class="section-subtitle reveal">
+      Explore our work across web development, AI automation, SaaS platforms, mobile applications,
+      branding, creative technology and engineering solutions.
+    </p>
+
+    <!-- Counts are calculated from the cards below (JS keeps them in sync) -->
+    <div class="about-stats reveal">
+      <div class="stat-mini"><h3 data-count="all">22</h3><p>Projects</p></div>
+      <div class="stat-mini"><h3 data-count="web">8</h3><p>Web &amp; Apps</p></div>
+      <div class="stat-mini"><h3 data-count="ai">6</h3><p>AI Solutions</p></div>
+      <div class="stat-mini"><h3 data-count="design">5</h3><p>Branding &amp; Design</p></div>
+      <div class="stat-mini"><h3 data-count="engineering">3</h3><p>Engineering</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="section-wrap" style="padding-top:var(--space-lg);">
+  <div class="container-lg">
+
+    <div class="project-filters reveal" role="group" aria-label="Filter projects by category">
+      <button class="filter-btn active" data-filter="all" aria-pressed="true">All Solutions</button>
+      <button class="filter-btn" data-filter="web" aria-pressed="false">🌐 Web & Apps</button>
+      <button class="filter-btn" data-filter="ai" aria-pressed="false">🤖 AI Solutions</button>
+      <button class="filter-btn" data-filter="design" aria-pressed="false">🎨 Branding & Design</button>
+      <button class="filter-btn" data-filter="engineering" aria-pressed="false">🏗️ Engineering</button>
+    </div>
+
+    <p class="projects-status" id="projectsStatus" aria-live="polite">Showing all 22 projects</p>
+
+    <div class="projects-grid" id="projectsGrid">
+
+      <!-- ==================== WEB & APPS ==================== -->
+
+      <!-- Runambiz -->
+      <div class="project-card reveal" data-category="web">
+        <div class="project-img-wrapper">
+          <img src="runambiz.jpeg" alt="Runambiz AI Commerce Platform" loading="lazy">
+          <div class="project-overlay">
+            <a href="https://www.runambiz.com/" class="project-link" target="_blank" rel="noopener">Visit Website</a>
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="badge badge--violet"><i class="fas fa-robot"></i> AI Commerce Platform</span>
+          <h3>Runambiz — AI Store & Business Automation Platform</h3>
+          <p>An AI-powered commerce platform that gives businesses a free online store, automated customer replies, order management, payment automation, invoices, and a unified dashboard for selling through WhatsApp, Telegram, and the web.</p>
+          <div class="project-tags">
+            <span class="tag tag--violet">AI Automation</span>
+            <span class="tag tag--indigo">SaaS</span>
+            <span class="tag tag--fuchsia">E-Commerce</span>
+            <span class="tag tag--purple">WhatsApp</span>
+            <span class="tag tag--violet">Telegram</span>
+            <span class="tag tag--indigo">Payment Automation</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- WebLive.app -->
+      <div class="project-card reveal" data-category="web">
+        <div class="project-img-wrapper">
+          <img src="Webapp.webp" alt="WebLive.app Website Builder Platform" loading="lazy">
+          <div class="project-overlay">
+            <a href="https://weblive.app" class="project-link" target="_blank" rel="noopener">Visit Website</a>
+            <a href="https://github.com/HoblemercyTech/weblive" class="project-link" target="_blank" rel="noopener">View Code</a>
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="badge badge--violet"><i class="fas fa-rocket"></i> Flagship Platform</span>
+          <h3>WebLive.app — No-Code Website Builder Platform</h3>
+          <p>A modern no-code platform that enables users to create professional websites, portfolios, online stores, digital business cards, link-in-bio pages, and invoices within minutes.</p>
+          <div class="project-tags">
+            <span class="tag tag--violet">No-Code</span>
+            <span class="tag tag--indigo">SaaS</span>
+            <span class="tag tag--fuchsia">Website Builder</span>
+            <span class="tag tag--purple">Portfolio Sites</span>
+            <span class="tag tag--violet">Online Stores</span>
+            <span class="tag tag--indigo">Web Platform</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AnonChat -->
+      <div class="project-card reveal" data-category="web">
+        <div class="project-img-wrapper">
+          <img src="project1.webp" alt="AnonChat - Real-Time Anonymous Messaging Platform" loading="lazy">
+          <div class="project-overlay">
+            <a href="https://annonconnect.vercel.app" class="project-link" target="_blank" rel="noopener">Live Demo</a>
+            <a href="https://github.com/HoblemercyTech/AnnonConnect" class="project-link" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="badge badge--purple"><i class="fas fa-trophy"></i> Communication Platform</span>
+          <h3>AnonChat — Real-Time Anonymous Messaging Platform</h3>
+          <p>A modern real-time anonymous messaging platform with secure authentication, private and group conversations, online/offline indicators, message reactions, and dark mode support.</p>
+          <div class="project-tags">
+            <span class="tag tag--violet">React.js</span>
+            <span class="tag tag--purple">Supabase</span>
+            <span class="tag tag--indigo">Authentication</span>
+            <span class="tag tag--fuchsia">Real-Time Chat</span>
+            <span class="tag tag--violet">Dark Mode</span>
+            <span class="tag tag--indigo">Group Chat</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BudgetSave -->
+      <div class="project-card reveal" data-category="web">
+        <div class="project-img-wrapper">
+          <img src="BudgetSave.png" alt="BudgetSave Savings & Contribution Tracking Platform" loading="lazy">
+          <div class="project-overlay">
+            <a href="https://www.budgetsaveit.com/" class="project-link" target="_blank" rel="noopener">Visit Website</a>
+            <a href="https://github.com/HoblemercyTech/NaijaNest" class="project-link" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="badge badge--violet"><i class="fas fa-piggy-bank"></i> Savings & Contribution Platform</span>
+          <h3>BudgetSave — Contribution & Savings Tracking Platform</h3>
+          <p>A digital contribution management platform that helps users track daily savings, contribution cycles, payment records, and withdrawal requests, with dedicated dashboards for members, collectors, and administrators.</p>
+          <div class="project-tags">
+            <span class="tag tag--violet">React</span>
+            <span class="tag tag--indigo">Supabase</span>
+            <span class="tag tag--fuchsia">Capacitor</span>
+            <span class="tag tag--purple">Dashboard</span>
+            <span class="tag tag--violet">Contribution Tracking</span>
+            <span class="tag tag--indigo">Mobile App</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- QuickBills -->
+      <div class="project-card reveal" data-category="web">
+        <div class="project-img-wrapper">
+          <img src="project10.webp" alt="QuickBills Digital Bill Payment Platform" loading="lazy">
+          <div class="project-overlay">
+            <a href="https://hoblemercytech.github.io/QuickBills" class="project-link" target="_blank" rel="noopener">Live Demo</a>
+            <a href="https://github.com/Hoblemercytech/QuickBills" class="project-link" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="badge badge--indigo"><i class="fas fa-bolt"></i> Business Solution</span>
+          <h3>QuickBills — Digital Bill Payment Platform</h3>
+          <p>A modern digital payment platform for airtime, data bundles, electricity tokens, cable TV subscriptions, virtual account payments, and airtime-to-cash conversion.</p>
+          <div class="project-tags">
+            <span class="tag tag--violet">React.js</span>
+            <span class="tag tag--indigo">Payment Integration</span>
+            <span class="tag tag--fuchsia">Bill Payments</span>
+            <span class="tag tag--purple">Virtual Accounts</span>
+            <span class="tag tag--violet">Airtime to Cash</span>
+            <span class="tag tag--indigo">Responsive Design</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flying Kings -->
+      <div class="project-card reveal" data-category="web">
+        <div class="project-img-wrapper">
+          <img src="King.webp" alt="Flying Kings 16x16 Online Draughts Game" loading="lazy">
+          <div class="project-overlay">
+            <a href="https://flyingking.vercel.app" class="project-link" target="_blank" rel="noopener">Play Game</a>
+            <a href="https://github.com/HoblemercyTech/FlyingKing" class="project-link" target="_blank" rel="noopener">View Code</a>
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="badge badge--violet"><i class="fas fa-crown"></i> Live Game</span>
+          <h3>Flying Kings — 16×16 Online Draughts Game</h3>
+          <p>A premium web-based draughts game with Flying Kings mechanics, AI opponent mode, online friend challenges, smooth animations, and responsive gameplay.</p>
+          <div class="project-metrics">
+            <div class="metric"><span class="metric-value">16×16</span><span class="metric-label">Board</span></div>
+            <div class="metric"><span class="metric-value">AI</span><span class="metric-label">Opponent</span></div>
+            <div class="metric"><span class="metric-value">Online</span><span class="metric-label">Challenge</span></div>
+          </div>
+          <div class="project-tags">
+            <span class="tag tag--violet">JavaScript</span>
+            <span class="tag tag--indigo">Game Logic</span>
+            <span class="tag tag--fuchsia">AI Mode</span>
+            <span class="tag tag--purple">Multiplayer</span>
+            <span class="tag tag--violet">Responsive UI</span>
+            <span class="tag tag--indigo">PWA Ready</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CycleCare -->
+      <div class="project-card reveal" data-category="web">
+        <div class="project-img-wrapper">
+          <img src="project6.webp" alt="CycleCare Ovulation Tracker Web App" loading="lazy">
+          <div class="project-overlay">
+            <a href="https://cycle-care-theta.vercel.app" class="project-link" target="_blank" rel="noopener">Live Demo</a>
+            <a href="https://github.com/HoblemercyTech/cycle_care" class="project-link" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="badge badge--fuchsia"><i class="fas fa-heart"></i> Health App</span>
+          <h3>CycleCare — Ovulation Tracker Web App</h3>
+          <p>A health tracking web app that helps users estimate their menstrual cycle, ovulation window, fertile days, and pregnancy chances with an easy-to-use responsive interface.</p>
+          <div class="project-tags">
+            <span class="tag tag--violet">React.js</span>
+            <span class="tag tag--fuchsia">Health App</span>
+            <span class="tag tag--indigo">Date Calculator</span>
+            <span class="tag tag--purple">Responsive Design</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- KeepSafe -->
+      <div class="project-card reveal" data-category="web">
+        <div class="project-img-wrapper">
+          <img src="project11.webp" alt="KeepSafe Personal Digital Vault" loading="lazy">
+          <div class="project-overlay">
+            <a href="https://keepsafe-smoky.vercel.app/" class="project-link" target="_blank" rel="noopener">Live Demo</a>
+            <a href="https://github.com/HoblemercyTech/keepsafe" class="project-link" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="badge badge--indigo"><i class="fas fa-shield-alt"></i> Security</span>
+          <h3>KeepSafe — Personal Digital Vault</h3>
+          <p>A secure cloud-based storage platform for photos, documents, notes, links, passwords, and personal records — recoverable from any device.</p>
+          <div class="project-tags">
+            <span class="tag tag--violet">React.js</span>
+            <span class="tag tag--indigo">Firebase</span>
+            <span class="tag tag--fuchsia">Cloud Storage</span>
+            <span class="tag tag--purple">Authentication</span>
+            <span class="tag tag--violet">File Upload</span>
+            <span class="tag tag--indigo">Data Security</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== AI SOLUTIONS ==================== -->
+
+      <!-- AI Faceless Content -->
+      <div class="project-card reveal" data-category="ai">
+        <div class="project-img-wrapper">
+          <img src="last.png" alt="AI Faceless Content short-form video" loading="lazy">
+          <div class="project-overlay">
+            <a href="https://vt.tiktok.com/ZSxo9a4g8/" target="_blank" rel="noopener" class="project-link">View Video</a>
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="badge badge--purple"><i class="fas fa-video"></i> AI Production</span>
+          <h3>AI Faceless Content — Short-Form Video</h3>
+          <p>Fully AI-assisted faceless video: AI scripting, image generation, voice synthesis, and motion editing from end to end.</p>
+          <div class="project-tags">
+            <span class="tag tag--purple">AI Video</span>
+            <span class="tag tag--fuchsia">Faceless</span>
+            <span class="tag tag--indigo">AI Voiceover</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Smart Business Automation System -->
+      <div class="project-card reveal" data-category="ai">
+        <div class="project-img-wrapper">
+          <img src="ai-automation.jpg" alt="AI business automation system" loading="lazy">
+          <div class="project-overlay">
+            <a href="index.html#contact" class="project-link">
+              <i class="fas fa-arrow-up-right-from-square"></i> Start Automation
+            </a>
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="badge badge--purple"><i class="fas fa-robot"></i> AI Automation</span>
+          <h3>Smart Business Automation System</h3>
+          <p>An AI-powered workflow system designed to automate customer enquiries, order processing, confirmations, notifications and repetitive business operations.</p>
+          <div class="project-tags">
+            <span class="tag tag--purple">AI Chatbot</span>
+            <span class="tag tag--fuchsia">Workflow Automation</span>
+            <span class="tag tag--indigo">WhatsApp Integration</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- One Last Chance -->
+      <div class="project-card reveal" data-category="ai">
+        <div class="project-img-wrapper">
+          <img src="lasts.png" alt="One Last Chance AI sports drama poster" loading="lazy">
+          <div class="project-overlay">
+            <a href="https://www.facebook.com/share/r/19HAAs8NiW/?mibextid=wwXIfr/" target="_blank" rel="noopener" class="project-link">
+              <i class="fas fa-play"></i> Watch Project
+            </a>
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="badge badge--purple"><i class="fas fa-clapperboard"></i> AI Movie Production</span>
+          <h3>One Last Chance — AI Sports Drama</h3>
+          <p>An original cinematic Nigerian football series created with AI-assisted storytelling, character design, image generation, voice production and motion editing.</p>
+          <div class="project-tags">
+            <span class="tag tag--purple">AI Film</span>
+            <span class="tag tag--fuchsia">Storytelling</span>
+            <span class="tag tag--indigo">Cinematic Editing</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Business Solutions Recommender -->
+      <div class="project-card reveal" data-category="ai">
+        <div class="project-img-wrapper">
+          <img src="growth-plan.webp" alt="AI Business Assessment and Recommendation System" loading="lazy">
+          <div class="project-overlay">
+            <a href="assessment.html" target="_blank" rel="noopener" class="project-link">
+              <i class="fas fa-arrow-up-right-from-square"></i> Try Assessment
+            </a>
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="badge badge--purple"><i class="fas fa-wand-magic-sparkles"></i> Smart Business Advisor</span>
+          <h3>AI Business Solutions Recommender</h3>
+          <p>An intelligent assessment platform that studies a user’s business, identifies key challenges and automatically recommends suitable digital, branding, automation and growth solutions.</p>
+          <div class="project-tags">
+            <span class="tag tag--purple">AI Assessment</span>
+            <span class="tag tag--fuchsia">Smart Recommendation</span>
+            <span class="tag tag--indigo">Business Automation</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- His Brother's Bride -->
+      <div class="project-card reveal" data-category="ai">
+        <div class="project-img-wrapper">
+          <img src="his.webp" alt="His Brother's Bride AI cinematic drama poster" loading="lazy">
+          <div class="project-overlay">
+            <a href="https://vt.tiktok.com/ZSC2uCsJT" target="_blank" rel="noopener" class="project-link">View Project</a>
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="badge badge--fuchsia"><i class="fas fa-film"></i> AI Entertainment</span>
+          <h3>His Brother's Bride — AI Cinematic Drama</h3>
+          <p>Full AI-powered cinematic drama series — screenplay development, character creation, visual storytelling, movie poster design, scene generation, and narration workflow.</p>
+          <div class="project-tags">
+            <span class="tag tag--fuchsia">AI Storytelling</span>
+            <span class="tag tag--purple">AI Cinema</span>
+            <span class="tag tag--indigo">Character Design</span>
+            <span class="tag tag--violet">Image Generation</span>
+            <span class="tag tag--fuchsia">Drama Series</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Adunni -->
+      <div class="project-card reveal" data-category="ai">
+        <div class="project-img-wrapper">
+          <img src="adunni.png" alt="Adunni AI-generated Nigerian drama series" loading="lazy">
+          <div class="project-overlay">
+            <a href="https://vt.tiktok.com/ZSxo913x8/" target="_blank" rel="noopener" class="project-link">View Video</a>
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="badge badge--purple"><i class="fas fa-star"></i> Portfolio</span>
+          <h3>Adunni — AI-Generated Nigerian Drama Series</h3>
+          <p>Cinematic faceless drama series rooted in Yoruba storytelling, produced entirely with AI scene generation and voiceover.</p>
+          <div class="project-tags">
+            <span class="tag tag--purple">AI Video</span>
+            <span class="tag tag--fuchsia">Nigerian Drama</span>
+            <span class="tag tag--indigo">Yoruba</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== BRANDING & DESIGN ==================== -->
+
+      <!-- Branding & Design Gallery -->
+      <div class="project-card reveal" data-category="design">
+        <div class="project-img-wrapper">
+          <img src="branding-gallery-cover.png" alt="HoblemercyTech flyer, logo and branding design gallery" loading="lazy">
+          <div class="project-overlay">
+            <a href="gallery.html" class="project-link"><i class="fas fa-images"></i> View Gallery</a>
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="badge badge--fuchsia"><i class="fas fa-palette"></i> Branding & Creative Design</span>
+          <h3>Flyer, Logo & Branding Design Gallery</h3>
+          <p>Explore a collection of premium flyers, logo designs, brand identities, promotional graphics, photo edits and visual content created for different businesses and brands.</p>
+          <div class="project-tags">
+            <span class="tag tag--purple">Flyer Design</span>
+            <span class="tag tag--fuchsia">Logo Design</span>
+            <span class="tag tag--indigo">Brand Identity</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BuildForge -->
+      <div class="project-card reveal" data-category="design">
+        <div class="project-img-wrapper">
+          <img src="project3.webp" alt="BuildForge Brand Identity" loading="lazy">
+        </div>
+        <div class="project-info">
+          <span class="badge badge--indigo"><i class="fas fa-palette"></i> Branding</span>
+          <h3>BuildForge — Construction Startup Brand Identity</h3>
+          <p>Complete brand system: logo, color palette, typography, and marketing collateral communicating trust and precision.</p>
+          <div class="project-tags">
+            <span class="tag tag--indigo">Figma</span>
+            <span class="tag tag--purple">Illustrator</span>
+            <span class="tag tag--fuchsia">Branding</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hoblemercy Edit Gallery -->
+      <div class="project-card reveal" data-category="design">
+        <div class="project-img-wrapper">
+          <img src="gallery-cover.jpg" alt="Hoblemercy Edit photography and snap edit gallery" loading="lazy">
+          <div class="project-overlay">
+            <a href="gallery.html" class="project-link"><i class="fas fa-images"></i> View Gallery</a>
+          </div>
+        </div>
+        <div class="project-info">
+          <span class="badge badge--fuchsia"><i class="fas fa-camera-retro"></i> Hoblemercy Edit</span>
+          <h3>Photography & Snap Edit Gallery</h3>
+          <p>Explore our collection of premium portrait photography, beauty retouching, creative edits, graduation sessions, outdoor shoots and same-day edited photo deliveries.</p>
+          <div class="project-tags">
+            <span class="tag tag--purple">Portraits</span>
+            <span class="tag tag--fuchsia">Beauty Retouch</span>
+            <span class="tag tag--indigo">Snap & Edit</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BIGVEE -->
+      <div class="project-card reveal" data-category="design">
+        <div class="project-img-wrapper">
+          <img src="Bigvee.webp" alt="BIGVEE Global Services Brand Identity" loading="lazy">
+        </div>
+        <div class="project-info">
+          <span class="badge badge--purple"><i class="fas fa-trophy"></i> Brand Identity</span>
+          <h3>BIGVEE Global Services — Enterprise Brand & Visual Identity</h3>
+          <p>Premium corporate brand identity system — logo design, typography, color palette, business cards, letterhead, invoices, marketing flyers, and branded stationery.</p>
+          <div class="project-tags">
+            <span class="tag tag--purple">Brand Identity</span>
+            <span class="tag tag--fuchsia">Logo Design</span>
+            <span class="tag tag--indigo">Corporate Branding</span>
+            <span class="tag tag--violet">Stationery</span>
+            <span class="tag tag--purple">Adobe Illustrator</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AURIVANT Solutions -->
+      <div class="project-card reveal" data-category="design">
+        <div class="project-img-wrapper">
+          <img src="bigve.png" alt="AURIVANT Solutions Brand Identity" loading="lazy">
+        </div>
+        <div class="project-info">
+          <span class="badge badge--purple"><i class="fas fa-trophy"></i> Brand Identity</span>
+          <h3>AURIVANT Solutions — Enterprise Brand & Visual Identity</h3>
+          <p>Premium corporate brand identity system — logo design, typography, color palette, business cards, letterhead, invoices, marketing flyers, and branded stationery.</p>
+          <div class="project-tags">
+            <span class="tag tag--purple">Brand Identity</span>
+            <span class="tag tag--fuchsia">Logo Design</span>
+            <span class="tag tag--indigo">Corporate Branding</span>
+            <span class="tag tag--violet">Stationery</span>
+            <span class="tag tag--purple">Adobe Illustrator</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== ENGINEERING ==================== -->
+
+      <!-- 4-Storey Luxury Building -->
+      <div class="project-card reveal" data-category="engineering">
+        <div class="project-img-wrapper">
+          <img src="project7.webp" alt="4-Storey Luxury Residential Building in Lagos" loading="lazy">
+        </div>
+        <div class="project-info">
+          <span class="badge badge--fuchsia"><i class="fas fa-building"></i> Engineering</span>
+          <h3>4-Storey Luxury Residential Building — Lagos</h3>
+          <p>Fully designed in Revit with complete structural drawings, foundation systems, and site supervision per Nigerian building codes.</p>
+          <div class="project-tags">
+            <span class="tag tag--fuchsia">Revit</span>
+            <span class="tag tag--purple">Structural Design</span>
+            <span class="tag tag--indigo">Site Supervision</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modern 2-Storey Residence -->
+      <div class="project-card reveal" data-category="engineering">
+        <div class="project-img-wrapper">
+          <img src="project8.webp" alt="Modern 2-Storey Contemporary Residence render" loading="lazy">
+        </div>
+        <div class="project-info">
+          <span class="badge badge--fuchsia"><i class="fas fa-home"></i> Engineering</span>
+          <h3>Modern 2-Storey Contemporary Residence</h3>
+          <p>Minimalist architecture with warm accents, spacious terraces, photorealistic 3D renders, and full landscape integration.</p>
+          <div class="project-tags">
+            <span class="tag tag--fuchsia">Revit</span>
+            <span class="tag tag--purple">3D Rendering</span>
+            <span class="tag tag--indigo">Modern Architecture</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4-Storey Structural Package -->
+      <div class="project-card reveal" data-category="engineering">
+        <div class="project-img-wrapper">
+          <img src="project4.webp" alt="4-Storey Luxury Residential structural package drawings" loading="lazy">
+        </div>
+        <div class="project-info">
+          <span class="badge badge--fuchsia"><i class="fas fa-drafting-compass"></i> Engineering</span>
+          <h3>4-Storey Luxury Residential — Structural Package</h3>
+          <p>Full structural design, working drawings, setting out, and site supervision — compliant with Nigerian building codes.</p>
+          <div class="project-tags">
+            <span class="tag tag--fuchsia">AutoCAD</span>
+            <span class="tag tag--purple">Structural Analysis</span>
+            <span class="tag tag--indigo">Code Compliance</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section portfolio-cta">
+  <div class="cta-content reveal">
+    <div class="section-eyebrow" style="margin-bottom:14px;">
+      <i class="fas fa-handshake"></i> Let’s Work Together
+    </div>
+
+    <h2>
+      Ready to Build
+      <span class="section-title" style="display:inline;font-size:inherit;">Something Amazing?</span>
+    </h2>
+
+    <p>
+      Whether you need a professional website, AI automation, business branding, mobile application
+      or a custom digital solution, let’s turn your idea into something real.
+    </p>
+
+    <div class="cta-actions">
+      <a href="index.html#contact" class="cta-btn">
+        <i class="fas fa-paper-plane"></i> Start Your Project
+      </a>
+      <a href="https://wa.me/2349064748799?text=Hello%20HoblemercyTech%2C%20I%20would%20like%20to%20discuss%20a%20project." target="_blank" rel="noopener" class="cta-btn cta-btn--outline">
+        <i class="fab fa-whatsapp" style="color:#22C55E;font-size:1.15rem;"></i> Chat on WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <div class="floating-elements" aria-hidden="true">
+    <i class="fas fa-laptop-code floating-icon" style="top:12%;left:8%;"></i>
+    <i class="fas fa-robot floating-icon" style="top:28%;right:14%;animation-delay:-6s;"></i>
+    <i class="fas fa-palette floating-icon" style="bottom:26%;left:16%;animation-delay:-11s;"></i>
+    <i class="fas fa-compass-drafting floating-icon" style="bottom:18%;right:20%;animation-delay:-4s;"></i>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+
+    <!-- Brand -->
+    <div>
+      <div class="footer-logo">Hoblemercy<span class="tech">Tech</span></div>
+      <p class="footer-desc">
+        HoblemercyTech is a creative technology and digital solutions studio
+        helping individuals, businesses and organisations grow through
+        websites, branding, AI automation, content creation and engineering
+        solutions.
+      </p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/hoblemercytech" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.tiktok.com/@hoblemercytech" target="_blank" rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="https://www.linkedin.com/in/hoblemercytech" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://x.com/hoblemercytech" target="_blank" rel="noopener" aria-label="X"><i class="fab fa-x-twitter"></i></a>
+        <a href="https://www.facebook.com/share/1FUWTcpzxk/?mibextid=wwXIfr" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+        <a href="https://github.com/hoblemercyTech" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://wa.me/2349064748799" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html#about">About Us</a></li>
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="projects.html">Portfolio</a></li>
+        <li><a href="index.html#pricing">Packages</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Services -->
+    <div class="footer-col">
+      <h4>Our Solutions</h4>
+      <ul>
+        <li>Web &amp; App Development</li>
+        <li>Online Store Solutions</li>
+        <li>AI Automation</li>
+        <li>AI Content Creation</li>
+        <li>Branding &amp; Graphic Design</li>
+        <li>Business Growth Solutions</li>
+        <li>Snap &amp; Edit Photography</li>
+        <li>Engineering Solutions</li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-col">
+      <h4>Get In Touch</h4>
+      <ul>
+        <li>
+          <a href="mailto:hoblemercytech@gmail.com">
+            <i class="fas fa-envelope" style="color:var(--fuchsia);margin-right:7px;"></i>
+            hoblemercytech@gmail.com
+          </a>
+        </li>
+        <li>
+          <a href="tel:+2348169941984">
+            <i class="fas fa-phone" style="color:var(--fuchsia);margin-right:7px;"></i>
+            +234 816 994 1984
+          </a>
+        </li>
+        <li>
+          <a href="https://wa.me/2349064748799" target="_blank" rel="noopener">
+            <i class="fab fa-whatsapp" style="color:var(--fuchsia);margin-right:7px;"></i>
+            Chat on WhatsApp
+          </a>
+        </li>
+        <li>
+          <i class="fas fa-globe" style="color:var(--fuchsia);margin-right:7px;"></i>
+          Nigeria • Available Worldwide
+        </li>
+        <li>
+          <a href="index.html">
+            <i class="fas fa-link" style="color:var(--fuchsia);margin-right:7px;"></i>
+            Visit Our Website
+          </a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Footer Bottom -->
+  <div class="footer-bottom">
+    <p>&copy; <span id="current-year"></span> HoblemercyTech. All Rights Reserved.</p>
+    <p>Code. Design. Engineer. Automate.</p>
+  </div>
+</footer>
+
+<button id="back-to-top" class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<script>
+const SUPABASE_URL      = 'https://kwxgaoyjbkawerguljtx.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3eGdhb3lqYmthd2VyZ3VsanR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4MDI1MTAsImV4cCI6MjA5NzM3ODUxMH0.v39YkkhMsfwBJwPWbSdDjqHRozV9h6FdEhtM5KxakVI';
+
+/* ===== VISITOR TRACKING (same as homepage) ===== */
+const trackWebsiteVisitor = async () => {
+  try {
+    const key = 'hoblemercy_visitor_id';
+    let visitorId = localStorage.getItem(key);
+    if (!visitorId) {
+      visitorId = typeof crypto?.randomUUID === 'function'
+        ? crypto.randomUUID()
+        : `visitor-${Date.now()}-${Math.random().toString(36).slice(2, 15)}`;
+      localStorage.setItem(key, visitorId);
+    }
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/track_site_visit`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+      },
+      body: JSON.stringify({
+        p_visitor_id: visitorId,
+        p_page_path: window.location.pathname || '/projects.html',
+        p_referrer: document.referrer || null
+      }),
+      keepalive: true
+    });
+    if (!res.ok) console.warn('Visitor tracking failed:', await res.text());
+  } catch (err) {
+    console.warn('Visitor analytics error:', err);
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  trackWebsiteVisitor();
+
+  const loader = document.getElementById('premium-loader');
+
+  // ===== THEME =====
+  const toggleBtn = document.getElementById('themeToggle');
+  const icon = toggleBtn.querySelector('i');
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    icon.className = 'fa-solid fa-sun';
+  }
+  toggleBtn.addEventListener('click', () => {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (dark) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('theme', 'light');
+      icon.className = 'fa-solid fa-moon';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+      icon.className = 'fa-solid fa-sun';
+    }
+  });
+
+  // ===== SIDENAV =====
+  const sidenav = document.getElementById('sidenav');
+  const openNav  = () => { sidenav.classList.add('active'); sidenav.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; };
+  const closeNav = () => { sidenav.classList.remove('active'); sidenav.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; };
+  document.getElementById('menuBtn').addEventListener('click', openNav);
+  document.getElementById('closeBtn').addEventListener('click', closeNav);
+  document.querySelectorAll('.sidenav a').forEach(a => a.addEventListener('click', closeNav));
+  sidenav.addEventListener('click', e => { if (e.target === sidenav) closeNav(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && sidenav.classList.contains('active')) closeNav(); });
+
+  // ===== LOADER (internal page links only) =====
+  document.querySelectorAll('a[href]').forEach(link => {
+    const h = link.getAttribute('href');
+    if (!h || h.startsWith('#') || h.startsWith('mailto') || h.startsWith('tel') || h.startsWith('https://wa.me') || link.target === '_blank') return;
+    link.addEventListener('click', e => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      e.preventDefault();
+      loader.classList.add('active');
+      setTimeout(() => { window.location.href = link.href; }, 700);
+    });
+  });
+  // Hide loader if the page is restored from the back/forward cache
+  window.addEventListener('pageshow', () => loader.classList.remove('active'));
+
+  // ===== SCROLL REVEAL =====
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('active'); revealObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  // ===== CURSOR GLOW =====
+  const glow = document.getElementById('cursorGlow');
+  let rafId = null;
+  document.addEventListener('mousemove', e => {
+    if (!rafId) rafId = requestAnimationFrame(() => {
+      if (glow) { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; }
+      rafId = null;
+    });
+  });
+
+  // ===== PROJECT COUNTS (calculated from the cards) =====
+  const cards = Array.from(document.querySelectorAll('#projectsGrid .project-card'));
+  const countFor = f => f === 'all' ? cards.length : cards.filter(c => c.dataset.category === f).length;
+  document.querySelectorAll('[data-count]').forEach(el => { el.textContent = countFor(el.dataset.count); });
+
+  // ===== PROJECT FILTERS =====
+  const status = document.getElementById('projectsStatus');
+  const buttons = document.querySelectorAll('.filter-btn');
+  const labelFor = b => b.textContent.replace(/[^\p{L}\p{N}&\s]/gu, '').trim();
+
+  const applyFilter = f => {
+    let shown = 0;
+    cards.forEach(c => {
+      const match = f === 'all' || c.dataset.category === f;
+      c.style.display = match ? 'block' : 'none';
+      if (match) shown++;
+    });
+    return shown;
+  };
+
+  buttons.forEach(b => {
+    b.addEventListener('click', () => {
+      buttons.forEach(x => { x.classList.remove('active'); x.setAttribute('aria-pressed', 'false'); });
+      b.classList.add('active');
+      b.setAttribute('aria-pressed', 'true');
+      const f = b.dataset.filter;
+      const shown = applyFilter(f);
+      status.textContent = f === 'all'
+        ? `Showing all ${shown} projects`
+        : `Showing ${shown} of ${cards.length} projects in ${labelFor(b)}`;
+    });
+  });
+  status.textContent = `Showing all ${applyFilter('all')} projects`;
+
+  // ===== BACK TO TOP =====
+  const btt = document.getElementById('back-to-top');
+  if (btt) {
+    window.addEventListener('scroll', () => {
+      btt.classList.toggle('visible', window.scrollY > 600);
+    }, { passive: true });
+    btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  }
+
+  // ===== FOOTER YEAR =====
+  const yearEl = document.getElementById('current-year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+});
+</script>
+
+</body>
+</html>
